@@ -59,7 +59,7 @@ const DayCompletedPage = () => {
             alt="Funny Sticker"
             className="max-w-xs mx-auto mb-6"
           />
-          <Button onClick={() => router.push('/project-details')}>Proceed to the next day</Button>
+          <Button onClick={() => router.push('/day-2')}>Proceed to the next day</Button>
         </div>
       </main>
 

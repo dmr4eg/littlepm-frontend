@@ -51,7 +51,9 @@ const ProjectDetailsPage = () => {
 
           <div className="flex gap-8">
             <div className="flex flex-col gap-4 w-1/2">
-              <Button className="rounded-3xl text-2xl h-24 bg-background text-primary" onClick={() => router.push('/buy-ready-sets')}>
+              <Button
+                className="rounded-3xl text-2xl h-24 bg-background text-primary"
+                onClick={() => router.push('/buy-ready-sets')}>
                 <img
                   src="https://icons.veryicon.com/png/o/miscellaneous/3d-element-icon/cube-48.png"
                   alt="Buy Ready Sets"
@@ -60,7 +62,9 @@ const ProjectDetailsPage = () => {
                 BUY READY SETS
               </Button>
               <div className="text-center">OR</div>
-              <Button className="rounded-3xl text-2xl h-24 bg-background text-primary" onClick={() => router.push('/diy-items')}>
+              <Button
+                className="rounded-3xl text-2xl h-24 bg-background text-primary"
+                onClick={() => router.push('/diy-items')}>
                 <img
                   src="https://cdn3.iconfinder.com/data/icons/education-2-58/48/107-48.png"
                   alt="DIY from Own Items"
@@ -92,3 +96,5 @@ const ProjectDetailsPage = () => {
 };
 
 export default ProjectDetailsPage;
+
+    
