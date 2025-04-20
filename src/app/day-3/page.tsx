@@ -8,8 +8,6 @@ import {ChevronLeft, Share2, X} from 'lucide-react';
 import Link from 'next/link';
 import React, {useState, useRef} from 'react';
 import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle} from "@/components/ui/dialog"
-import { jsPDF } from 'jspdf';
-import html2canvas from 'html2canvas';
 
 const DayThreePage = () => {
   const router = useRouter();
@@ -28,23 +26,31 @@ const DayThreePage = () => {
   const handleShare = async () => {
     if (!reportRef.current) return;
 
-    const canvas = await html2canvas(reportRef.current, {
-        scale: 2, // Increase resolution
-    });
+    try {
+      const html2canvas = (await import('html2canvas')).default;
+      const jsPDF = (await import('jspdf')).jsPDF;
 
-    const imgData = canvas.toDataURL('image/png');
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    const imgProps= pdf.getImageProperties(imgData);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      const canvas = await html2canvas(reportRef.current, {
+          scale: 2, // Increase resolution
+      });
 
-    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgProps= pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
-    // Download the PDF
-    pdf.save("pitch_deck.pdf");
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
 
-    setOpen(false);
-    router.push('/day-3-completion');
+      // Download the PDF
+      pdf.save("pitch_deck.pdf");
+
+      setOpen(false);
+      router.push('/day-3-completion');
+    } catch (error) {
+      console.error("Error generating or downloading PDF:", error);
+      // Optionally, display an error message to the user.
+    }
   };
 
   return (
@@ -74,7 +80,7 @@ const DayThreePage = () => {
             {Array.from({length: 7}).map((_, index) => {
               const day = index + 1;
               const isActive = day === 3; // Day 3 is active
-              const isCompleted = day &lt; 3;
+              const isCompleted = day < 3;
               return (
                 <div key={index} className="relative z-10">
                   {isActive ? (
