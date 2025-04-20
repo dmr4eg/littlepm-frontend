@@ -5,15 +5,38 @@ import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import {useRouter} from 'next/navigation';
 import Image from 'next/image';
-import React, {useState} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {Input} from "@/components/ui/input";
+import {Loader2, Share2, X} from "lucide-react";
+import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle} from "@/components/ui/dialog";
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
+import {CheckCircle} from 'lucide-react';
 import Link from 'next/link';
-import {Loader2} from "lucide-react";
 
 const DaySixPage = () => {
   const router = useRouter();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [open, setOpen] = React.useState(false)
+  const reportRef = useRef<HTMLDivElement>(null);
+
+  const [recommendedPrice, setRecommendedPrice] = useState('');
+  const [sellingPlace, setSellingPlace] = useState('');
+  const [sellingDate, setSellingDate] = useState('');
+  const [contactInfo, setContactInfo] = useState('');
+
+  useEffect(() => {
+    // Ensure window is defined before using it
+    if (typeof window !== 'undefined') {
+      // Check if there's a stored image URL in localStorage
+      const storedImage = localStorage.getItem('uploadedImage');
+      if (storedImage) {
+        setSelectedImage(storedImage);
+      }
+    }
+  }, []);
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -21,10 +44,42 @@ const DaySixPage = () => {
       setIsUploading(true);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setSelectedImage(reader.result as string);
+        const imageUrl = reader.result as string;
+        setSelectedImage(imageUrl);
         setIsUploading(false);
+        // Store the image URL in localStorage
+        localStorage.setItem('uploadedImage', imageUrl);
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handleShare = async () => {
+    if (!reportRef.current) return;
+
+    try {
+      setIsGenerating(true);
+      const canvas = await html2canvas(reportRef.current, {
+          scale: 2, // Increase resolution
+      });
+
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgProps= pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+
+      // Download the PDF
+      pdf.save("promotional_material.pdf");
+    } catch (error) {
+      console.error("Error generating or downloading PDF:", error);
+      // Optionally, display an error message to the user.
+    } finally {
+      setIsGenerating(false);
+      setOpen(false);
+       router.push('/day-7');
     }
   };
 
@@ -51,7 +106,7 @@ const DaySixPage = () => {
             {Array.from({length: 7}).map((_, index) => {
               const day = index + 1;
               const isActive = day === 6;
-              const isCompleted = day < 6;
+              const isCompleted = day &lt; 6;
               return (
                 <div key={index} className="relative z-10">
                   {isActive ? (
@@ -117,22 +172,42 @@ const DaySixPage = () => {
 
               <div>
                 Recommended price
-                <Input type="text" placeholder="Enter Name"/>
+                <Input
+                  type="text"
+                  placeholder="Enter Price"
+                  value={recommendedPrice}
+                  onChange={(e) => setRecommendedPrice(e.target.value)}
+                />
               </div>
 
               <div>
                 Where do you plan to sell?
-                <Input type="text" placeholder="Write address"/>
+                <Input
+                  type="text"
+                  placeholder="Write address"
+                  value={sellingPlace}
+                  onChange={(e) => setSellingPlace(e.target.value)}
+                />
               </div>
 
               <div>
                 When do you plan to sell?
-                <Input type="text" placeholder="DD/MM/YYYY"/>
+                <Input
+                  type="text"
+                  placeholder="DD/MM/YYYY"
+                  value={sellingDate}
+                  onChange={(e) => setSellingDate(e.target.value)}
+                />
               </div>
 
               <div>
                 How to contact you?
-                <Input type="text" placeholder="Contact number or email"/>
+                <Input
+                  type="text"
+                  placeholder="Contact number or email"
+                  value={contactInfo}
+                  onChange={(e) => setContactInfo(e.target.value)}
+                />
               </div>
             </div>
 
@@ -151,14 +226,56 @@ const DaySixPage = () => {
           </div>
 
           <div className="flex justify-end">
-            <Link href="/day-7">
-              <Button>Proceed →</Button>
-            </Link>
+            <Button onClick={() => setOpen(true)}>Proceed →</Button>
           </div>
         </div>
       </main>
 
       <Footer/>
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto bg-[hsl(var(--secondary))]">
+          <DialogHeader>
+            <DialogTitle className="text-center">
+              Promotional Materials
+            </DialogTitle>
+          </DialogHeader>
+          <DialogDescription className="text-center">
+             {/* Description */}
+          </DialogDescription>
+
+          <div ref={reportRef} className="flex flex-col gap-4 mt-4 items-center">
+            {selectedImage && (
+              <Image
+                src={selectedImage}
+                alt="Uploaded Toy"
+                width={200}
+                height={200}
+                className="rounded-md"
+              />
+            )}
+            <div className="text-center">
+              The cost is only &quot;{recommendedPrice}&quot; CZK
+              <br />
+              Come to &quot;{sellingPlace}&quot;, Prague, on &quot;{sellingDate}&quot;
+              <br />
+              For any questions, contact: &quot;{contactInfo}&quot;
+            </div>
+          </div>
+
+          <div className="flex justify-center mt-6">
+            <Button variant="outline" onClick={handleShare} disabled={isGenerating}>
+              {isGenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Share2 className="mr-2 h-4 w-4" />}
+              Share
+            </Button>
+          </div>
+          <div className="absolute top-4 right-4">
+             <Button variant="ghost" size="icon" onClick={() => setOpen(false)}>
+                <X className="h-4 w-4"/>
+              </Button>
+            </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
