@@ -46,6 +46,12 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'clipart-library.com',
+        port: '',
+        pathname: '/images_k/**',
+      },
     ],
   },
 };
