@@ -5,6 +5,7 @@ import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import {useRouter} from 'next/navigation';
 import React, {useEffect} from 'react';
+import {CheckCircle} from 'lucide-react';
 
 interface DayCompletedProps {
   searchParams: {
@@ -27,8 +28,11 @@ const DayCompletedPage: React.FC<DayCompletedProps> = ({searchParams}) => {
       nextDayPath = '/day-3';
       break;
     case 4:
-       nextDayPath = '/day-3-completion';
-       break;
+      nextDayPath = '/day-3-completion';
+      break;
+    case 5:
+        nextDayPath = '/day-5';
+        break;
     default:
       nextDayPath = '/day-1';
   }
@@ -39,7 +43,7 @@ const DayCompletedPage: React.FC<DayCompletedProps> = ({searchParams}) => {
 
   return (
     <div className="min-h-screen bg-[#FAF0E6] font-sans flex flex-col">
-      <Header />
+      <Header/>
 
       <main className="flex-grow p-8 flex flex-col items-center justify-center">
         <div className="text-center">
@@ -57,7 +61,7 @@ const DayCompletedPage: React.FC<DayCompletedProps> = ({searchParams}) => {
         </div>
       </main>
 
-      <Footer />
+      <Footer/>
     </div>
   );
 };

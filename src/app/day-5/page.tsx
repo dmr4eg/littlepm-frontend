@@ -3,21 +3,15 @@
 import {Button} from '@/components/ui/button';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {useRouter} from 'next/navigation';
-import {Accordion, AccordionContent, AccordionItem, AccordionTrigger} from "@/components/ui/accordion"
-import {Checkbox} from "@/components/ui/checkbox"
-import React, {useState} from 'react';
-import {Play} from 'lucide-react';
-import Link from 'next/link';
 import Image from 'next/image';
+import {ChevronLeft, Play} from 'lucide-react';
+import Link from 'next/link';
+import React, {useState, useRef} from 'react';
 
-const DayFourPage = () => {
+const DayFivePage = () => {
   const router = useRouter();
-  const [allReady, setAllReady] = useState(false);
-  const [assembleFirstToy, setAssembleFirstToy] = useState(false);
-  const [testForQuality, setTestForQuality] = useState(false);
-
-  const allChecked = allReady && assembleFirstToy && testForQuality;
 
   return (
     <div className="min-h-screen bg-[#FAF0E6] font-sans flex flex-col">
@@ -46,8 +40,8 @@ const DayFourPage = () => {
             {/* Stars */}
             {Array.from({length: 7}).map((_, index) => {
               const day = index + 1;
-              const isActive = day === 4;
-              const isCompleted = day < 4;
+              const isActive = day === 5;
+              const isCompleted = day < 5;
               return (
                 <div key={index} className="relative z-10">
                   {isActive ? (
@@ -82,46 +76,41 @@ const DayFourPage = () => {
           </div>
 
           <div>
-            You planned to make &quot;10&quot; DIY toys from own items.
+            Try to improve making toy and make it faster
           </div>
 
-          <Accordion type="single" collapsible>
-            <AccordionItem value="items-ready">
-              <AccordionTrigger className="flex justify-between items-center">
-                <div className="flex items-center">
-                  <Checkbox id="all-items" checked={allReady} onCheckedChange={setAllReady}/>
-                  <label htmlFor="all-items" className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                    All items are ready
-                  </label>
-                </div>
-                <Button variant="ghost" size="icon">
-                  <Play className="h-4 w-4"/>
-                </Button>
-              </AccordionTrigger>
-              <AccordionContent>
-                <ul className="list-disc pl-5 mt-2">
-                  <li>Stick - &quot;10&quot; pieces</li>
-                  <li>Feathers - 5-7 pieces per 1 toy</li>
-                  <li>Pompon - big size &quot;10&quot; pieces</li>
-                  <li>Rope - 50 cm per 1 toy</li>
-                  <li>Hot glue</li>
-                </ul>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-
-          <div className="flex items-center">
-            <Checkbox id="assemble-first-toy" checked={assembleFirstToy} onCheckedChange={setAssembleFirstToy}/>
-            <label htmlFor="assemble-first-toy" className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-              Assemble first toy
-            </label>
+          <div>
+            What went well
+            <input
+              type="text"
+              placeholder="Type here"
+              className="border rounded p-1 w-full"
+            />
           </div>
 
-          <div className="flex items-center">
-            <Checkbox id="test-for-quality" checked={testForQuality} onCheckedChange={setTestForQuality}/>
-            <label htmlFor="test-for-quality" className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-              Test it for quality
-            </label>
+          <div>
+            What can be improved?
+            <input
+              type="text"
+              placeholder="Type here"
+              className="border rounded p-1 w-full"
+            />
+          </div>
+
+          <div className="flex items-center justify-start gap-4">
+            <div>Number of ready toys</div>
+            <Select>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="09"/>
+              </SelectTrigger>
+              <SelectContent>
+                {[...Array(51).keys()].map(number => (
+                  <SelectItem key={number} value={String(number).padStart(2, '0')}>
+                    {String(number).padStart(2, '0')}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="flex items-center justify-center gap-4">
@@ -133,15 +122,13 @@ const DayFourPage = () => {
                 src="https://www.w3schools.com/html/mov_bbb.mp4"
                 type="video/mp4"
               />
-              <div className="text-sm">About day 4</div>
+              <div className="text-sm">About day 5</div>
             </video>
           </div>
 
-          <div className="flex justify-center">
-            <Link href="/day-completed?day=4">
-              <Button disabled={!allChecked}>
-                Complete Day 4 →
-              </Button>
+          <div className="flex justify-end">
+            <Link href="/day-6">
+              <Button>Proceed →</Button>
             </Link>
           </div>
         </div>
@@ -162,4 +149,4 @@ const DayFourPage = () => {
   );
 };
 
-export default DayFourPage;
+export default DayFivePage;
