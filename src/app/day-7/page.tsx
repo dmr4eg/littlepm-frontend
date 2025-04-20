@@ -3,11 +3,12 @@
 import {Button} from '@/components/ui/button';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {useRouter} from 'next/navigation';
-import React, {useState, useEffect, useRef} from 'react';
 import Image from 'next/image';
 import {CheckCircle} from 'lucide-react';
 import Link from 'next/link';
+import React, {useState, useEffect, useRef} from 'react';
 import {Checkbox} from "@/components/ui/checkbox";
 import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle} from "@/components/ui/dialog";
 import { jsPDF } from 'jspdf';
@@ -108,26 +109,19 @@ const DaySevenPage = () => {
         if (!reportRef.current) return;
 
         try {
-          // Dynamically import html2canvas and jsPDF
-          const html2canvas = (await import('html2canvas')).default;
-          const { jsPDF } = await import('jspdf');
-
           const canvas = await html2canvas(reportRef.current, {
               scale: 2, // Increase resolution
           });
 
           const imgData = canvas.toDataURL('image/png');
-          const pdf = new jsPDF('p', 'mm', 'a4');
-          const imgProps= pdf.getImageProperties(imgData);
-          const pdfWidth = pdf.internal.pageSize.getWidth();
-          const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-          pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-
-          // Download the PDF
-          pdf.save("sales_report.pdf");
+            const link = document.createElement('a');
+            link.href = imgData;
+            link.download = 'sales_report.png'; // Set the filename
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         } catch (error) {
-          console.error("Error generating or downloading PDF:", error);
+          console.error("Error generating or downloading PNG:", error);
           // Optionally, display an error message to the user.
         } finally {
           setOpen(false);
@@ -381,3 +375,4 @@ const DaySevenPage = () => {
 };
 
 export default DaySevenPage;
+

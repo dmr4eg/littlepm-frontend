@@ -34,20 +34,17 @@ const DayThreePage = () => {
       });
 
       const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const imgProps= pdf.getImageProperties(imgData);
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-
-      // Download the PDF
-      pdf.save("pitch_deck.pdf");
+      const link = document.createElement('a');
+      link.href = imgData;
+      link.download = 'pitch_deck.png'; // Set the filename
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
 
       setOpen(false);
       router.push('/day-3-completion');
     } catch (error) {
-      console.error("Error generating or downloading PDF:", error);
+      console.error("Error generating or downloading PNG:", error);
       // Optionally, display an error message to the user.
     }
   };
