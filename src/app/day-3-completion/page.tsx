@@ -1,23 +1,23 @@
 'use client';
 
-import { Button } from "@/components/ui/button";
+import {Button} from "@/components/ui/button";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import { useRouter } from 'next/navigation';
+import {useRouter} from 'next/navigation';
 import React from 'react';
 import Image from 'next/image';
-import { CheckCircle } from 'lucide-react';
+import {CheckCircle} from 'lucide-react';
 import Link from 'next/link';
 
 const DayThreeCompletionPage = () => {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-[#FAF0E6] font-sans flex flex-col">
+    <div className="min-h-screen bg-[hsl(var(--secondary))] font-sans flex flex-col">
       <Header />
 
       <main className="flex-grow p-8">
-        <div className="bg-[#FAF0E6] rounded-3xl p-8 flex flex-col gap-6">
+        <div className="bg-[hsl(var(--secondary))] rounded-3xl p-8 flex flex-col gap-6">
           <div className="flex items-center justify-between">
             <h1 className="text-3xl font-bold text-primary">Little Project Manager</h1>
             <Button variant="outline">LOGOUT</Button>
@@ -37,9 +37,9 @@ const DayThreeCompletionPage = () => {
             {/* Timeline */}
             <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-border z-0" />
             {/* Stars */}
-            {Array.from({ length: 7 }).map((_, index) => {
+            {Array.from({length: 7}).map((_, index) => {
               const day = index + 1;
-              const isCompleted = day &lt;= 3;
+              const isCompleted = day <= 3;
               const isActive = day === 3;
               return (
                 <div key={index} className="relative z-10">
@@ -69,21 +69,21 @@ const DayThreeCompletionPage = () => {
           <div className="text-center">
             How much money investor gave you
             <input
-                type="number"
-                placeholder="1200 CZK"
-                className="border rounded p-1 w-32 text-right"
-              />
+              type="number"
+              placeholder="1200 CZK"
+              className="border rounded p-1 w-32 text-right"
+            />
           </div>
           <div className="text-center">
             Congratulations!
             <Image
-                src="https://i.pinimg.com/originals/79/9f/9b/799f9ba5ca59f32e512c89151727204e.png"
-                alt="Congratulations"
-                width={100}
-                height={100}
-              />
+              src="https://i.pinimg.com/originals/79/9f/9b/799f9ba5ca59f32e512c89151727204e.png"
+              alt="Congratulations"
+              width={100}
+              height={100}
+            />
 
-              <div>Investor gave you the money, now you can buy all items to make toys.</div>
+            <div>Investor gave you the money, now you can buy all items to make toys.</div>
 
           </div>
 
@@ -111,3 +111,5 @@ const DayThreeCompletionPage = () => {
 };
 
 export default DayThreeCompletionPage;
+
+    
