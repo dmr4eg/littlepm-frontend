@@ -69,4 +69,5 @@ const DayCompletedPage = () => {
 };
 
 export default DayCompletedPage;
-'
+
+    
