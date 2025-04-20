@@ -6,8 +6,10 @@ import Header from '@/components/Header';
 import {useRouter} from 'next/navigation';
 import {ChevronLeft, Share2, X} from 'lucide-react';
 import Link from 'next/link';
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle} from "@/components/ui/dialog"
+import { jsPDF } from 'jspdf';
+import html2canvas from 'html2canvas';
 
 const DayThreePage = () => {
   const router = useRouter();
@@ -16,16 +18,33 @@ const DayThreePage = () => {
   const [expense, setExpense] = useState('');
   const [returnPercentage, setReturnPercentage] = useState('');
   const [amountToReturn, setAmountToReturn] = useState('');
+  const reportRef = useRef<HTMLDivElement>(null);
 
   const calculateAmount = () => {
     const calculatedAmount = parseFloat(expense || '0') + (parseFloat(expense || '0') * parseFloat(returnPercentage || '0') / 100);
     setAmountToReturn(calculatedAmount.toFixed(2));
   };
 
-  const handleShare = () => {
-    // Here you would implement the logic to generate an image of the report
-    // and allow the user to download it.
-    alert('Share button clicked! Implement image generation and download logic here.');
+  const handleShare = async () => {
+    if (!reportRef.current) return;
+
+    const canvas = await html2canvas(reportRef.current, {
+        scale: 2, // Increase resolution
+    });
+
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const imgProps= pdf.getImageProperties(imgData);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+
+    // Download the PDF
+    pdf.save("pitch_deck.pdf");
+
+    setOpen(false);
+    router.push('/day-3-completion');
   };
 
   return (
@@ -55,7 +74,7 @@ const DayThreePage = () => {
             {Array.from({length: 7}).map((_, index) => {
               const day = index + 1;
               const isActive = day === 3; // Day 3 is active
-              const isCompleted = day < 3;
+              const isCompleted = day &lt; 3;
               return (
                 <div key={index} className="relative z-10">
                   {isActive ? (
@@ -169,7 +188,7 @@ const DayThreePage = () => {
             incididunt ut labore et dolore magna aliqua.
           </DialogDescription>
 
-          <div className="flex flex-col gap-4 mt-4">
+          <div ref={reportRef} className="flex flex-col gap-4 mt-4">
             <div className="flex justify-between items-center">
               <label>Number of planned toys to sell</label>
               <input
@@ -232,7 +251,7 @@ const DayThreePage = () => {
             </Button>
           </div>
           <div className="absolute top-4 right-4">
-             <Button variant="ghost" size="icon" onClick={() => {setOpen(false); router.push('/day-completed?day=3')}}>
+             <Button variant="ghost" size="icon" onClick={() => setOpen(false)}>
                 <X className="h-4 w-4"/>
               </Button>
             </div>

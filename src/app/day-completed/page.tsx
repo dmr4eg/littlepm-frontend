@@ -34,70 +34,11 @@ const DayCompletedPage: React.FC<DayCompletedProps> = ({searchParams}) => {
   const stickerImageUrl =
     'https://i.pinimg.com/originals/79/9f/9b/799f9ba5ca59f32e512c89151727204e.png';
 
-  useEffect(() => {
-    // Function to start the confetti animation
-    const startConfetti = () => {
-      const confettiContainer = document.getElementById('confetti-container');
-      if (!confettiContainer) return;
-
-      const confettiCount = 200;
-      const confettiColors = [
-        '#f44336',
-        '#e91e63',
-        '#9c27b0',
-        '#673ab7',
-        '#3f51b5',
-        '#2196f3',
-        '#03a9f4',
-        '#00bcd4',
-        '#009688',
-        '#4caf50',
-        '#8bc34a',
-        '#cddc39',
-        '#ffeb3b',
-        '#ffc107',
-        '#ff9800',
-        '#ff5722',
-        '#795548',
-      ];
-
-      for (let i = 0; i < confettiCount; i++) {
-        const confetti = document.createElement('div');
-        confetti.classList.add('confetti');
-        confetti.style.backgroundColor =
-          confettiColors[Math.floor(Math.random() * confettiColors.length)];
-        confetti.style.left = `${Math.random() * 100}vw`;
-        confetti.style.animationDuration = `${Math.random() * 3 + 2}s`;
-        confetti.style.animationDelay = `${Math.random()}s`;
-        confettiContainer.appendChild(confetti);
-
-        // Remove confetti after animation completes
-        confetti.addEventListener('animationend', () => confetti.remove());
-      }
-    };
-
-    startConfetti();
-
-    // Cleanup function to remove all confetti elements
-    return () => {
-      const confettiContainer = document.getElementById('confetti-container');
-      if (confettiContainer) {
-        while (confettiContainer.firstChild) {
-          confettiContainer.removeChild(confettiContainer.firstChild);
-        }
-      }
-    };
-  }, []);
-
   return (
     <div className="min-h-screen bg-[hsl(var(--secondary))] font-sans flex flex-col">
       <Header />
 
       <main className="flex-grow p-8 flex flex-col items-center justify-center">
-        <div
-          id="confetti-container"
-          className="fixed top-0 left-0 w-full h-full pointer-events-none"></div>
-
         <div className="text-center">
           <h1 className="text-4xl font-bold text-primary mb-4">
             {congratsMessage}
@@ -119,4 +60,3 @@ const DayCompletedPage: React.FC<DayCompletedProps> = ({searchParams}) => {
 };
 
 export default DayCompletedPage;
-
