@@ -94,11 +94,11 @@ const DaySixPage = () => {
             <div className="flex flex-col gap-4">
               <div>
                 Upload the photo of the ready toy
-                <label htmlFor="image-upload" className="cursor-pointer flex items-center">
+                <label htmlFor="imageUpload" className="cursor-pointer flex items-center">
                   <Button variant="outline" component="span">
                     UPLOAD
                     <input
-                      id="image-upload"
+                      id="imageUpload"
                       type="file"
                       className="hidden"
                       onChange={handleImageUpload}
