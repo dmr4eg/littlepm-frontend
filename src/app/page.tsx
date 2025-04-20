@@ -3,6 +3,7 @@ import CourseCard from '@/components/CourseCard';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
+import Link from 'next/link';
 
 const courses = [
   {
@@ -46,12 +47,13 @@ export default function Home() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 p-6">
           {courses.map((course, index) => (
-            <CourseCard
-              key={index}
-              title={course.title}
-              description={course.description}
-              imageUrl={course.imageUrl}
-            />
+            <Link href="/project-dashboard" key={index}>
+              <CourseCard
+                title={course.title}
+                description={course.description}
+                imageUrl={course.imageUrl}
+              />
+            </Link>
           ))}
         </div>
       </main>

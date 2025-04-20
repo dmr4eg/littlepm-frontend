@@ -20,7 +20,6 @@ const CourseCard: React.FC<CourseCardProps> = ({ title, description, imageUrl })
           className="rounded-md mb-4"
           style={{ width: '100%', height: '150px', objectFit: 'cover' }}
         />
-        <CardDescription>{description}</CardDescription>
       </CardContent>
     </Card>
   );
