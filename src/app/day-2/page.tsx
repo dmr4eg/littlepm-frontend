@@ -185,7 +185,7 @@ const DayTwoPage = () => {
                 BACK
               </Button>
             </Link>
-            <Button onClick={() => router.push('/day-completed')}>COMPLETE DAY 2 →</Button>
+            <Button onClick={() => router.push('/day-completed?day=2')}>COMPLETE DAY 2 →</Button>
           </div>
         </div>
         <div className="text-center text-muted-foreground text-xs mt-4">
@@ -206,5 +206,3 @@ const DayTwoPage = () => {
 };
 
 export default DayTwoPage;
-
-    
