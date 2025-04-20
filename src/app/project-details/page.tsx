@@ -60,7 +60,7 @@ const ProjectDetailsPage = () => {
                 BUY READY SETS
               </Button>
               <div className="text-center">OR</div>
-              <Button className="rounded-3xl text-2xl h-24 bg-background text-primary">
+              <Button className="rounded-3xl text-2xl h-24 bg-background text-primary" onClick={() => router.push('/diy-items')}>
                 <img
                   src="https://cdn3.iconfinder.com/data/icons/education-2-58/48/107-48.png"
                   alt="DIY from Own Items"
@@ -92,4 +92,3 @@ const ProjectDetailsPage = () => {
 };
 
 export default ProjectDetailsPage;
-
