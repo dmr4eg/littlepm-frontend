@@ -4,7 +4,7 @@ import {Button} from '@/components/ui/button';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import {useRouter} from 'next/navigation';
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Image from 'next/image';
 import {CheckCircle} from 'lucide-react';
 import Link from 'next/link';
@@ -12,6 +12,41 @@ import {Checkbox} from "@/components/ui/checkbox";
 
 const DaySevenPage = () => {
   const router = useRouter();
+  const [soldPrices, setSoldPrices] = useState<{[key: string]: string}>({});
+  const [checkboxStates, setCheckboxStates] = useState<{[key: string]: boolean}>({});
+
+  useEffect(() => {
+    // Load data from local storage on component mount
+    const storedSoldPrices = localStorage.getItem('soldPrices');
+    const storedCheckboxStates = localStorage.getItem('checkboxStates');
+
+    if (storedSoldPrices) {
+      setSoldPrices(JSON.parse(storedSoldPrices));
+    }
+    if (storedCheckboxStates) {
+      setCheckboxStates(JSON.parse(storedCheckboxStates));
+    }
+  }, []);
+
+  useEffect(() => {
+    // Save data to local storage whenever it changes
+    localStorage.setItem('soldPrices', JSON.stringify(soldPrices));
+    localStorage.setItem('checkboxStates', JSON.stringify(checkboxStates));
+  }, [soldPrices, checkboxStates]);
+
+  const handlePriceChange = (index: number, value: string) => {
+    setSoldPrices(prev => ({
+      ...prev,
+      [`toy-${index}`]: value,
+    }));
+  };
+
+  const handleCheckboxChange = (index: number) => {
+    setCheckboxStates(prev => ({
+      ...prev,
+      [`toy-${index}`]: !prev[`toy-${index}`],
+    }));
+  };
 
   return (
     <div className="min-h-screen bg-[#FAF0E6] font-sans flex flex-col">
@@ -90,7 +125,12 @@ const DaySevenPage = () => {
               {Array.from({length: 12}).map((_, index) => (
                 <li key={index} className="flex justify-between items-center py-2">
                   <div className="flex items-center">
-                    <Checkbox id={`toy-${index}`} />
+                    <Checkbox
+                      id={`toy-${index}`}
+                      checked={checkboxStates[`toy-${index}`] || false}
+                      onCheckedChange={() => handleCheckboxChange(index)}
+                      disabled={checkboxStates[`toy-${index}`] || false}
+                    />
                     <label htmlFor={`toy-${index}`} className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                       Enter Sold Price (CZK)
                     </label>
@@ -99,6 +139,9 @@ const DaySevenPage = () => {
                     type="text"
                     placeholder="00.00 CZK"
                     className="border rounded p-1 w-32 text-right"
+                    value={soldPrices[`toy-${index}`] || ''}
+                    onChange={(e) => handlePriceChange(index, e.target.value)}
+                    disabled={!checkboxStates[`toy-${index}`]}
                   />
                 </li>
               ))}
