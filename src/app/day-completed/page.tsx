@@ -17,7 +17,19 @@ const DayCompletedPage: React.FC<DayCompletedProps> = ({searchParams}) => {
   const {day = '1'} = searchParams; // Default to day 1
 
   const nextDay = parseInt(day, 10) + 1;
-  const nextDayPath = `/day-${nextDay}`;
+  let nextDayPath = '';
+
+  switch (nextDay) {
+    case 2:
+      nextDayPath = '/day-2';
+      break;
+    case 3:
+      nextDayPath = '/day-3';
+      break;
+    default:
+      nextDayPath = '/day-1';
+  }
+
   const congratsMessage = `Yay, Day ${day} is completed, good job!`;
   const stickerImageUrl =
     'https://i.pinimg.com/originals/79/9f/9b/799f9ba5ca59f32e512c89151727204e.png';
@@ -49,8 +61,7 @@ const DayCompletedPage: React.FC<DayCompletedProps> = ({searchParams}) => {
         '#795548',
       ];
 
-// Suggested code may be subject to a license. Learn more: ~LicenseLog:4234460034.
-      for (let i = 0; i < confettiCount; i++) {
+      for (let i = 0; i &lt; confettiCount; i++) {
         const confetti = document.createElement('div');
         confetti.classList.add('confetti');
         confetti.style.backgroundColor =
@@ -108,3 +119,4 @@ const DayCompletedPage: React.FC<DayCompletedProps> = ({searchParams}) => {
 };
 
 export default DayCompletedPage;
+
