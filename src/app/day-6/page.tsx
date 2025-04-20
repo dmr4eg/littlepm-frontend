@@ -73,13 +73,17 @@ const DaySixPage = () => {
 
       // Download the PDF
       pdf.save("promotional_material.pdf");
+       // Optionally, display an error message to the user.
     } catch (error) {
       console.error("Error generating or downloading PDF:", error);
-      // Optionally, display an error message to the user.
     } finally {
       setIsGenerating(false);
       setOpen(false);
-       router.push('/day-7');
+      // Redirect to the checklist page and pass the image
+      router.push({
+        pathname: '/day-6-checklist',
+        query: { image: selectedImage },
+      });
     }
   };
 
@@ -106,7 +110,7 @@ const DaySixPage = () => {
             {Array.from({length: 7}).map((_, index) => {
               const day = index + 1;
               const isActive = day === 6;
-              const isCompleted = day &lt; 6;
+              const isCompleted = day < 6;
               return (
                 <div key={index} className="relative z-10">
                   {isActive ? (
