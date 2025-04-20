@@ -3,15 +3,20 @@
 import {Button} from '@/components/ui/button';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {useRouter} from 'next/navigation';
 import Image from 'next/image';
-import {ChevronLeft, Play} from 'lucide-react';
+import React, {useState} from 'react';
+import {Checkbox} from "@/components/ui/checkbox";
 import Link from 'next/link';
-import React, {useState, useRef} from 'react';
 
-const DayFivePage = () => {
+const DayFiveChecklistPage = () => {
   const router = useRouter();
+  const [improvementsDone, setImprovementsDone] = useState(false);
+  const [toysAssembled, setToysAssembled] = useState(false);
+  const [toysPacked, setToysPacked] = useState(false);
+  const [readyToSell, setReadyToSell] = useState(false);
+
+  const allChecked = improvementsDone && toysAssembled && toysPacked && readyToSell;
 
   return (
     <div className="min-h-screen bg-[#FAF0E6] font-sans flex flex-col">
@@ -76,41 +81,39 @@ const DayFivePage = () => {
           </div>
 
           <div>
-            Try to improve making toy and make it faster
+            Are you ready to start selling your toys?
           </div>
 
-          <div>
-            What went well
-            <input
-              type="text"
-              placeholder="Type here"
-              className="border rounded p-1 w-full"
-            />
-          </div>
-
-          <div>
-            What can be improved?
-            <input
-              type="text"
-              placeholder="Type here"
-              className="border rounded p-1 w-full"
-            />
-          </div>
-
-          <div className="flex items-center justify-start gap-4">
-            <div>Number of ready toys</div>
-            <Select>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="09"/>
-              </SelectTrigger>
-              <SelectContent>
-                {[...Array(51).keys()].map(number => (
-                  <SelectItem key={number} value={String(number).padStart(2, '0')}>
-                    {String(number).padStart(2, '0')}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center">
+              <Checkbox id="improvements-done" checked={improvementsDone}
+                        onCheckedChange={setImprovementsDone}/>
+              <label htmlFor="improvements-done"
+                     className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                Improvements are done
+              </label>
+            </div>
+            <div className="flex items-center">
+              <Checkbox id="toys-assembled" checked={toysAssembled} onCheckedChange={setToysAssembled}/>
+              <label htmlFor="toys-assembled"
+                     className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                All toys are assembled and ready
+              </label>
+            </div>
+            <div className="flex items-center">
+              <Checkbox id="toys-packed" checked={toysPacked} onCheckedChange={setToysPacked}/>
+              <label htmlFor="toys-packed"
+                     className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                Toys are packed
+              </label>
+            </div>
+            <div className="flex items-center">
+              <Checkbox id="ready-to-sell" checked={readyToSell} onCheckedChange={setReadyToSell}/>
+              <label htmlFor="ready-to-sell"
+                     className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                Ready to sell
+              </label>
+            </div>
           </div>
 
           <div className="flex items-center justify-center gap-4">
@@ -127,8 +130,10 @@ const DayFivePage = () => {
           </div>
 
           <div className="flex justify-end">
-            <Link href="/day-5-checklist">
-              <Button>Proceed →</Button>
+            <Link href="/day-completed?day=5">
+              <Button disabled={!allChecked}>
+                Complete Day 5 →
+              </Button>
             </Link>
           </div>
         </div>
@@ -149,4 +154,4 @@ const DayFivePage = () => {
   );
 };
 
-export default DayFivePage;
+export default DayFiveChecklistPage;
