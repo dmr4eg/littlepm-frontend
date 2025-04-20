@@ -80,15 +80,12 @@ const DaySixPage = () => {
       setIsGenerating(false);
       setOpen(false);
       // Redirect to the checklist page and pass the image
-      router.push({
-        pathname: '/day-6-checklist',
-        query: { image: selectedImage },
-      });
+       router.push('/day-6-checklist');
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF0E6] font-sans flex flex-col">
+    <div className="min-h-screen bg-[hsl(var(--secondary))] font-sans flex flex-col">
       <Header/>
 
       <main className="flex-grow p-8">
