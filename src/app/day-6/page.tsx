@@ -8,17 +8,21 @@ import Image from 'next/image';
 import React, {useState} from 'react';
 import {Input} from "@/components/ui/input";
 import Link from 'next/link';
+import {Loader2} from "lucide-react";
 
 const DaySixPage = () => {
   const router = useRouter();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      setIsUploading(true);
       const reader = new FileReader();
       reader.onloadend = () => {
         setSelectedImage(reader.result as string);
+        setIsUploading(false);
       };
       reader.readAsDataURL(file);
     }
@@ -90,7 +94,7 @@ const DaySixPage = () => {
             <div className="flex flex-col gap-4">
               <div>
                 Upload the photo of the ready toy
-                <label htmlFor="image-upload" className="cursor-pointer">
+                <label htmlFor="image-upload" className="cursor-pointer flex items-center">
                   <Button variant="outline" component="span">
                     UPLOAD
                     <input
@@ -101,6 +105,7 @@ const DaySixPage = () => {
                       accept="image/*"
                     />
                   </Button>
+                  {isUploading && <Loader2 className="ml-2 h-4 w-4 animate-spin" />}
                 </label>
                 {selectedImage && (
                   <div className="mt-2">
