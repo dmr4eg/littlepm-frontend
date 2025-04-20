@@ -3,8 +3,15 @@
 import {Button} from '@/components/ui/button';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
+import {useRouter} from 'next/navigation';
 
 const ProjectDashboard = () => {
+  const router = useRouter();
+
+  const handleStartNowClick = () => {
+    router.push('/project-details');
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <Header />
@@ -33,7 +40,7 @@ const ProjectDashboard = () => {
                 cupidatat non proident, sunt in culpa qui officia deserunt
                 mollit anim id est laborum.&quot;
               </p>
-              <Button variant="outline" className="rounded-full">
+              <Button variant="outline" className="rounded-full" onClick={handleStartNowClick}>
                 Start Now
               </Button>
             </div>
