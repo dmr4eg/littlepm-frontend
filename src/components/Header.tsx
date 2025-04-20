@@ -1,9 +1,12 @@
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const Header = () => {
   return (
     <header className="bg-primary text-primary-foreground p-4 flex items-center justify-between">
-      <h1 className="text-2xl font-semibold">Little Project Manager</h1>
+      <Link href="/project-dashboard">
+        <h1 className="text-2xl font-semibold cursor-pointer">Little Project Manager</h1>
+      </Link>
       <nav>
         <Button variant="outline">LOGOUT</Button>
       </nav>
