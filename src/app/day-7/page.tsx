@@ -1,13 +1,14 @@
 'use client';
 
-import {Button} from "@/components/ui/button";
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
+import {Button} from '@/components/ui/button';
+import Footer from '@/components/Footer';
+import Header from '@/components/Header';
 import {useRouter} from 'next/navigation';
 import React from 'react';
 import Image from 'next/image';
 import {CheckCircle} from 'lucide-react';
 import Link from 'next/link';
+import {Checkbox} from "@/components/ui/checkbox";
 
 const DaySevenPage = () => {
   const router = useRouter();
@@ -34,7 +35,7 @@ const DaySevenPage = () => {
             {/* Stars */}
             {Array.from({length: 7}).map((_, index) => {
               const day = index + 1;
-              const isCompleted = day <= 7;
+              const isCompleted = day <= 6;
               const isActive = day === 7;
               return (
                 <div key={index} className="relative z-10">
@@ -45,6 +46,14 @@ const DaySevenPage = () => {
                       width={32}
                       height={32}
                       className="opacity-100"
+                    />
+                  ) : isActive ? (
+                    <Image
+                      src="https://clipart-library.com/images_k/star-clipart-transparent/star-clipart-transparent-12.png"
+                      alt={`Day ${day}`}
+                      width={48}
+                      height={48}
+                      className="w-12 h-12"
                     />
                   ) : (
                     <Image
@@ -62,24 +71,47 @@ const DaySevenPage = () => {
           </div>
 
           <div className="text-center">
-            Congratulations!
-            <Image
-              src="https://i.pinimg.com/originals/79/9f/9b/799f9ba5ca59f32e512c89151727204e.png"
-              alt="Congratulations"
-              width={100}
-              height={100}
-            />
-            <div>
-              You completed all steps to launch your toy.
-              <br />
-              You are awesome.
-            </div>
+            It is time to sell!
           </div>
 
-          <div className="flex justify-center">
-            <Link href="/">
-              <Button>Complete Day 7 →</Button>
-            </Link>
+          <div className="flex justify-between items-center">
+            <label>Recommended minimum number of toys and cost to sell</label>
+            <input
+              type="number"
+              placeholder="Calculated"
+              className="border rounded p-1 w-32 text-right"
+              readOnly
+            />
+          </div>
+
+          <div>
+            <div className="font-bold">Log here details of the sold toys</div>
+            <ul className="list-none pl-0">
+              {Array.from({length: 12}).map((_, index) => (
+                <li key={index} className="flex justify-between items-center py-2">
+                  <div className="flex items-center">
+                    <Checkbox id={`toy-${index}`} />
+                    <label htmlFor={`toy-${index}`} className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                      Enter Sold Price (CZK)
+                    </label>
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="00.00 CZK"
+                    className="border rounded p-1 w-32 text-right"
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="flex justify-between">
+            <Button variant="outline">
+              View sales report
+            </Button>
+            <Button onClick={() => router.push('/')}>
+              Finish Selling
+            </Button>
           </div>
         </div>
       </main>
