@@ -19,7 +19,7 @@ const DaySixChecklistPage = () => {
   const allChecked = promotionalMaterialsCreated && materialsDistributed;
 
   return (
-    <div className="min-h-screen bg-[#FAF0E6] font-sans flex flex-col">
+    <div className="min-h-screen bg-[hsl(var(--secondary))] font-sans flex flex-col">
       <Header/>
 
       <main className="flex-grow p-8">
@@ -141,7 +141,7 @@ const DaySixChecklistPage = () => {
           </div>
 
           <div className="flex justify-end">
-            <Link href="/day-7">
+            <Link href="/day-completed?day=6">
               <Button disabled={!allChecked}>
                 Complete Day 6 →
               </Button>

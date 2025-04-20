@@ -37,6 +37,9 @@ const DayCompletedPage: React.FC<DayCompletedProps> = ({searchParams}) => {
     case 6:
       nextDayPath = '/day-6';
       break;
+    case 7:
+      nextDayPath = '/day-7';
+      break;
     default:
       nextDayPath = '/day-1';
   }
@@ -46,31 +49,39 @@ const DayCompletedPage: React.FC<DayCompletedProps> = ({searchParams}) => {
     'https://i.pinimg.com/originals/79/9f/9b/799f9ba5ca59f32e512c89151727204e.png';
 
   useEffect(() => {
-    const createConfetti = () => {
-      const confettiCount = 200;
-      const colors = [
-        '#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5',
-        '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4caf50',
-        '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800',
-        '#ff5722', '#795548', '#9e9e9e', '#607d8b'
-      ];
+    // Trigger confetti only for specific day completions
+    if (day === '1' || day === '2' || day === '3' || day === '4' || day === '5') {
+      const createConfetti = () => {
+        const confettiCount = 200;
+        const colors = [
+          '#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5',
+          '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4caf50',
+          '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800',
+          '#ff5722', '#795548', '#9e9e9e', '#607d8b'
+        ];
 
-      for (let i = 0; i < confettiCount; i++) {
-        const confetti = document.createElement('div');
-        confetti.classList.add('confetti');
-        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-        confetti.style.left = `${Math.random() * 100}vw`;
-        confetti.style.animationDuration = `${Math.random() * 3 + 2}s`;
-        confetti.style.animationDelay = `${Math.random()}s`;
-        confetti.style.top = '-10px';
-        document.body.appendChild(confetti);
+        for (let i = 0; i < confettiCount; i++) {
+          const confetti = document.createElement('div');
+          confetti.classList.add('confetti');
+          confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+          confetti.style.left = `${Math.random() * 100}vw`;
+          confetti.style.animationDuration = `${Math.random() * 3 + 2}s`;
+          confetti.style.animationDelay = `${Math.random()}s`;
+          confetti.style.top = '-10px';
+          document.body.appendChild(confetti);
 
-        confetti.addEventListener('animationend', () => confetti.remove());
-      }
-    };
+          confetti.addEventListener('animationend', () => confetti.remove());
+        }
+      };
 
-    createConfetti();
-  }, []);
+      createConfetti();
+    }
+  }, [day]);
+
+  let additionalText = '';
+  if (day === '6') {
+    additionalText = "It's time to sell!";
+  }
 
   return (
     <div className="min-h-screen bg-[#FAF0E6] font-sans flex flex-col">
@@ -88,6 +99,7 @@ const DayCompletedPage: React.FC<DayCompletedProps> = ({searchParams}) => {
             height={100}
             className="max-w-xs mx-auto mb-6"
           />
+          {additionalText && <p className="text-lg mb-4">{additionalText}</p>}
           <Button onClick={() => router.push(nextDayPath)}>
             Proceed to the next day
           </Button>
@@ -100,4 +112,3 @@ const DayCompletedPage: React.FC<DayCompletedProps> = ({searchParams}) => {
 };
 
 export default DayCompletedPage;
-
