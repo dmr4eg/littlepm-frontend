@@ -3,8 +3,11 @@
 import {Button} from '@/components/ui/button';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
+import {useRouter} from 'next/navigation';
 
 const ProjectDetailsPage = () => {
+  const router = useRouter();
+
   return (
     <div className="min-h-screen bg-[hsl(var(--secondary))] font-sans flex flex-col">
       <Header />
@@ -48,7 +51,7 @@ const ProjectDetailsPage = () => {
 
           <div className="flex gap-8">
             <div className="flex flex-col gap-4 w-1/2">
-              <Button className="rounded-3xl text-2xl h-24 bg-background text-primary">
+              <Button className="rounded-3xl text-2xl h-24 bg-background text-primary" onClick={() => router.push('/buy-ready-sets')}>
                 <img
                   src="https://icons.veryicon.com/png/o/miscellaneous/3d-element-icon/cube-48.png"
                   alt="Buy Ready Sets"
@@ -76,9 +79,8 @@ const ProjectDetailsPage = () => {
                   src="https://www.w3schools.com/html/mov_bbb.mp4"
                   type="video/mp4"
                 />
-                Your browser does not support the video tag.
+                <div className="text-sm">About day 1</div>
               </video>
-              <div className="text-sm">About day 1</div>
             </div>
           </div>
         </div>
@@ -90,3 +92,4 @@ const ProjectDetailsPage = () => {
 };
 
 export default ProjectDetailsPage;
+
