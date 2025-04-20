@@ -112,7 +112,7 @@ const DIYItemsPage = () => {
                 BACK
               </Button>
             </Link>
-            <Button>COMPLETE DAY 1 →</Button>
+            <Button onClick={() => router.push('/day-completed')}>COMPLETE DAY 1 →</Button>
           </div>
         </div>
         <div className="text-center text-muted-foreground text-xs mt-4">
