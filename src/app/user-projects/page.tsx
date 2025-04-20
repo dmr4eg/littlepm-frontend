@@ -1,8 +1,9 @@
 'use client';
 
+import CourseCard from '@/components/CourseCard';
 import {Button} from '@/components/ui/button';
-import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from '@/components/ui/table';
 import {useRouter} from 'next/navigation';
+import Link from 'next/link';
 
 const UserProjectsPage = () => {
   const router = useRouter();
@@ -10,18 +11,21 @@ const UserProjectsPage = () => {
   const projects = [
     {
       id: 1,
-      name: 'Project A',
+      name: 'Cat Toy Business',
       status: 'In Progress',
+      imageUrl: 'https://picsum.photos/id/237/300/200',
     },
     {
       id: 2,
-      name: 'Project B',
+      name: 'Another Project',
       status: 'Completed',
+      imageUrl: 'https://picsum.photos/id/238/300/200',
     },
     {
       id: 3,
-      name: 'Project C',
+      name: 'Yet Another Project',
       status: 'Pending',
+      imageUrl: 'https://picsum.photos/id/239/300/200',
     },
   ];
 
@@ -32,31 +36,17 @@ const UserProjectsPage = () => {
         <Button onClick={() => router.push('/create-project')}>Create Project</Button>
       </div>
 
-      <Table>
-        <TableCaption>A list of your projects.</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[50px]">ID</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {projects.map(project => (
-            <TableRow key={project.id}>
-              <TableCell className="font-medium">{project.id}</TableCell>
-              <TableCell>{project.name}</TableCell>
-              <TableCell>{project.status}</TableCell>
-              <TableCell className="text-right">
-                <Button variant="outline" size="sm">
-                  View
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+        {projects.map(project => (
+          <Link href="/project-dashboard" key={project.id}>
+            <CourseCard
+              title={project.name}
+              description={project.status}
+              imageUrl={project.imageUrl}
+            />
+          </Link>
+        ))}
+      </div>
     </div>
   );
 };
