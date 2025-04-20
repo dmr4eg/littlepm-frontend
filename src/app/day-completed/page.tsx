@@ -6,6 +6,7 @@ import Header from '@/components/Header';
 import {useRouter} from 'next/navigation';
 import React, {useEffect} from 'react';
 import {CheckCircle} from 'lucide-react';
+import Image from 'next/image';
 
 interface DayCompletedProps {
   searchParams: {
@@ -31,8 +32,11 @@ const DayCompletedPage: React.FC<DayCompletedProps> = ({searchParams}) => {
       nextDayPath = '/day-3-completion';
       break;
     case 5:
-        nextDayPath = '/day-5';
-        break;
+      nextDayPath = '/day-5';
+      break;
+    case 6:
+      nextDayPath = '/day-6';
+      break;
     default:
       nextDayPath = '/day-1';
   }
@@ -40,6 +44,33 @@ const DayCompletedPage: React.FC<DayCompletedProps> = ({searchParams}) => {
   const congratsMessage = `Yay, Day ${day} is completed, good job!`;
   const stickerImageUrl =
     'https://i.pinimg.com/originals/79/9f/9b/799f9ba5ca59f32e512c89151727204e.png';
+
+  useEffect(() => {
+    const createConfetti = () => {
+      const confettiCount = 200;
+      const colors = [
+        '#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5',
+        '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4caf50',
+        '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800',
+        '#ff5722', '#795548', '#9e9e9e', '#607d8b'
+      ];
+
+      for (let i = 0; i < confettiCount; i++) {
+        const confetti = document.createElement('div');
+        confetti.classList.add('confetti');
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.left = `${Math.random() * 100}vw`;
+        confetti.style.animationDuration = `${Math.random() * 3 + 2}s`;
+        confetti.style.animationDelay = `${Math.random()}s`;
+        confetti.style.top = '-10px';
+        document.body.appendChild(confetti);
+
+        confetti.addEventListener('animationend', () => confetti.remove());
+      }
+    };
+
+    createConfetti();
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#FAF0E6] font-sans flex flex-col">
@@ -50,9 +81,11 @@ const DayCompletedPage: React.FC<DayCompletedProps> = ({searchParams}) => {
           <h1 className="text-4xl font-bold text-primary mb-4">
             {congratsMessage}
           </h1>
-          <img
+          <Image
             src={stickerImageUrl}
             alt="Funny Sticker"
+            width={100}
+            height={100}
             className="max-w-xs mx-auto mb-6"
           />
           <Button onClick={() => router.push(nextDayPath)}>

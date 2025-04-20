@@ -1,5 +1,3 @@
-'use client';
-
 import {Button} from '@/components/ui/button';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
