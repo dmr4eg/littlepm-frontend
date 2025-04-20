@@ -105,16 +105,6 @@ const DaySixPage = () => {
             </Link>
           </div>
         </div>
-        <div className="text-center text-muted-foreground text-xs mt-4">
-          Email: info@little.pm Privacy Policy Terms of Use
-          <div className="flex items-center justify-center gap-4 mt-2">
-            Connect with us
-            <span>Y</span>
-            <span>I</span>
-            <span>in</span>
-            <span>f</span>
-          </div>
-        </div>
       </main>
 
       <Footer/>
@@ -123,3 +113,4 @@ const DaySixPage = () => {
 };
 
 export default DaySixPage;
+

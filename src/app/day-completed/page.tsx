@@ -100,3 +100,4 @@ const DayCompletedPage: React.FC<DayCompletedProps> = ({searchParams}) => {
 };
 
 export default DayCompletedPage;
+

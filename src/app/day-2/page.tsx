@@ -183,16 +183,6 @@ const DayTwoPage = () => {
             <Button onClick={() => router.push('/day-completed?day=2')}>COMPLETE DAY 2 →</Button>
           </div>
         </div>
-        <div className="text-center text-muted-foreground text-xs mt-4">
-          Email: info@little.pm Privacy Policy Terms of Use
-          <div className="flex items-center justify-center gap-4 mt-2">
-            Connect with us
-            <span>Y</span>
-            <span>I</span>
-            <span>in</span>
-            <span>f</span>
-          </div>
-        </div>
       </main>
 
       <Footer />
@@ -201,3 +191,4 @@ const DayTwoPage = () => {
 };
 
 export default DayTwoPage;
+

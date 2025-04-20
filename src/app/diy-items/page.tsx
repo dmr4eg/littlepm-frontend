@@ -107,18 +107,7 @@ const DIYItemsPage = () => {
                 BACK
               </Button>
             </Link>
-            <Button onClick={() => router.push('/day-completed')}>COMPLETE DAY 1 →</Button>
-          </div>
-        </div>
-        <div className="text-center text-muted-foreground text-xs mt-4">
-          Email: info@little.pm Privacy Policy Terms of Use
-          <div className="flex items-center justify-center gap-4 mt-2">
-            Connect with us
-            {/* Replace with actual social media icons and links */}
-            <span>Y</span>
-            <span>I</span>
-            <span>in</span>
-            <span>f</span>
+            <Button onClick={() => router.push('/day-completed?day=1')}>COMPLETE DAY 1 →</Button>
           </div>
         </div>
       </main>
@@ -129,3 +118,4 @@ const DIYItemsPage = () => {
 };
 
 export default DIYItemsPage;
+
