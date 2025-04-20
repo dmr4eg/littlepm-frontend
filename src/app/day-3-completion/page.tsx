@@ -13,11 +13,11 @@ const DayThreeCompletionPage = () => {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-[hsl(var(--secondary))] font-sans flex flex-col">
+    <div className="min-h-screen bg-[#FAF0E6] font-sans flex flex-col">
       <Header />
 
       <main className="flex-grow p-8">
-        <div className="bg-[hsl(var(--secondary))] rounded-3xl p-8 flex flex-col gap-6">
+        <div className="bg-[#FAF0E6] rounded-3xl p-8 flex flex-col gap-6">
           <div className="flex items-center justify-between">
             <h1 className="text-3xl font-bold text-primary">Little Project Manager</h1>
             <Button variant="outline">LOGOUT</Button>
@@ -88,7 +88,7 @@ const DayThreeCompletionPage = () => {
           </div>
 
           <div className="flex justify-center">
-            <Link href="/diy-items">
+            <Link href="/day-4">
               <Button variant="outline">Complete Day 3 →</Button>
             </Link>
           </div>
@@ -111,5 +111,3 @@ const DayThreeCompletionPage = () => {
 };
 
 export default DayThreeCompletionPage;
-
-    

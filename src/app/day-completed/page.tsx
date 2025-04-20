@@ -8,7 +8,7 @@ import React, {useEffect} from 'react';
 
 interface DayCompletedProps {
   searchParams: {
-    day: string;
+    day?: string;
   };
 }
 
@@ -26,6 +26,9 @@ const DayCompletedPage: React.FC<DayCompletedProps> = ({searchParams}) => {
     case 3:
       nextDayPath = '/day-3';
       break;
+    case 4:
+       nextDayPath = '/day-3-completion';
+       break;
     default:
       nextDayPath = '/day-1';
   }
@@ -35,7 +38,7 @@ const DayCompletedPage: React.FC<DayCompletedProps> = ({searchParams}) => {
     'https://i.pinimg.com/originals/79/9f/9b/799f9ba5ca59f32e512c89151727204e.png';
 
   return (
-    <div className="min-h-screen bg-[hsl(var(--secondary))] font-sans flex flex-col">
+    <div className="min-h-screen bg-[#FAF0E6] font-sans flex flex-col">
       <Header />
 
       <main className="flex-grow p-8 flex flex-col items-center justify-center">
