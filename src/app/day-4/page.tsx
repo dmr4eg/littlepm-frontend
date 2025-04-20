@@ -133,11 +133,9 @@ const DayFourPage = () => {
           </div>
 
           <div className="flex justify-center">
-            <Link href="/day-completed?day=4">
-              <Button disabled={!allChecked}>
-                Complete Day 4 →
-              </Button>
-            </Link>
+            <Button disabled={!allChecked} onClick={() => router.push('/day-completed?day=4')}>
+              Complete Day 4 →
+            </Button>
           </div>
         </div>
       </main>
@@ -148,4 +146,3 @@ const DayFourPage = () => {
 };
 
 export default DayFourPage;
-
