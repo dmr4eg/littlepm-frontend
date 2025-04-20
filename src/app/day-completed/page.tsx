@@ -49,7 +49,8 @@ const DayCompletedPage: React.FC<DayCompletedProps> = ({searchParams}) => {
         '#795548',
       ];
 
-      for (let i = 0; i &lt; confettiCount; i++) {
+// Suggested code may be subject to a license. Learn more: ~LicenseLog:4234460034.
+      for (let i = 0; i < confettiCount; i++) {
         const confetti = document.createElement('div');
         confetti.classList.add('confetti');
         confetti.style.backgroundColor =
@@ -107,4 +108,3 @@ const DayCompletedPage: React.FC<DayCompletedProps> = ({searchParams}) => {
 };
 
 export default DayCompletedPage;
-'
