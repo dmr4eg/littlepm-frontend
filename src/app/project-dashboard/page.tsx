@@ -17,9 +17,6 @@ const ProjectDashboard = () => {
       <Header />
       <main className="flex-grow p-6 rounded-md">
         <section className="bg-secondary p-8 rounded-md shadow-md">
-          <h2 className="text-3xl font-bold mb-4 text-primary">
-            Little Project Manager
-          </h2>
           <p className="text-lg mb-6">
             You are doing a project of launching a &quot;Cat Toy&quot; business in
             7 days

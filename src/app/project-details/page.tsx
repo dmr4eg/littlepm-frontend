@@ -14,10 +14,6 @@ const ProjectDetailsPage = () => {
 
       <main className="flex-grow p-8">
         <div className="bg-[hsl(var(--secondary))] rounded-3xl p-8 flex flex-col gap-6">
-          <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-bold text-primary">Little Project Manager</h1>
-            <Button variant="outline">LOGOUT</Button>
-          </div>
 
           <div className="text-xl">"Cat Toy" in 7 days</div>
 
@@ -96,5 +92,3 @@ const ProjectDetailsPage = () => {
 };
 
 export default ProjectDetailsPage;
-
-    

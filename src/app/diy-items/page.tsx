@@ -17,11 +17,6 @@ const DIYItemsPage = () => {
 
       <main className="flex-grow p-8">
         <div className="bg-[hsl(var(--secondary))] rounded-3xl p-8 flex flex-col gap-6">
-          <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-bold text-primary">Little Project Manager</h1>
-            <Button variant="outline">LOGOUT</Button>
-          </div>
-
           <div className="flex items-center gap-2">
             <img
               src="https://cdn3.iconfinder.com/data/icons/education-2-58/48/107-48.png"

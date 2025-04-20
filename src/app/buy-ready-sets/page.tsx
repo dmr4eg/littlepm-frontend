@@ -17,11 +17,6 @@ const BuyReadySetsPage = () => {
 
       <main className="flex-grow p-8">
         <div className="bg-[hsl(var(--secondary))] rounded-3xl p-8 flex flex-col gap-6">
-          <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-bold text-primary">Little Project Manager</h1>
-            <Button variant="outline">LOGOUT</Button>
-          </div>
-
           <div className="flex items-center gap-2">
             <img
               src="https://icons.veryicon.com/png/o/miscellaneous/3d-element-icon/cube-48.png"

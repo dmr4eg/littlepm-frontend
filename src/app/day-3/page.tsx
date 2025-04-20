@@ -8,6 +8,8 @@ import {ChevronLeft, Share2, X} from 'lucide-react';
 import Link from 'next/link';
 import React, {useState, useRef} from 'react';
 import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle} from "@/components/ui/dialog"
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 
 const DayThreePage = () => {
   const router = useRouter();
@@ -27,9 +29,6 @@ const DayThreePage = () => {
     if (!reportRef.current) return;
 
     try {
-      const html2canvas = (await import('html2canvas')).default;
-      const { jsPDF } = await import('jspdf');
-
       const canvas = await html2canvas(reportRef.current, {
           scale: 2, // Increase resolution
       });
@@ -59,11 +58,6 @@ const DayThreePage = () => {
 
       <main className="flex-grow p-8">
         <div className="bg-[hsl(var(--secondary))] rounded-3xl p-8 flex flex-col gap-6">
-          <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-bold text-primary">Little Project Manager</h1>
-            <Button variant="outline">LOGOUT</Button>
-          </div>
-
           <div className="flex items-center gap-2">
             <img
               src="https://icons.veryicon.com/png/o/miscellaneous/3d-element-icon/cube-48.png"
