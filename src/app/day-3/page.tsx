@@ -1,13 +1,11 @@
 'use client';
 
 import {Button} from '@/components/ui/button';
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import {useRouter} from 'next/navigation';
 import {ChevronLeft} from 'lucide-react';
 import Link from 'next/link';
-import { Checkbox } from "@/components/ui/checkbox"
 
 const DayThreePage = () => {
   const router = useRouter();
@@ -141,5 +139,3 @@ const DayThreePage = () => {
 };
 
 export default DayThreePage;
-
-    
