@@ -236,7 +236,7 @@ const DaySevenPage = () => {
             }}>
               View sales report
             </Button>
-            <Button onClick={() => router.push('/')}>
+            <Button onClick={() => router.push('/day-7-completion')}>
               Finish Selling
             </Button>
           </div>
@@ -375,4 +375,3 @@ const DaySevenPage = () => {
 };
 
 export default DaySevenPage;
-
