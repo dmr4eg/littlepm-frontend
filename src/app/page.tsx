@@ -56,6 +56,14 @@ export default function Home() {
                 imageUrl="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'%3E%3Cline x1='12' y1='5' x2='12' y2='19'/%3E%3Cline x1='5' y1='12' x2='19' y2='12'/%3E%3C/svg%3E"
               />
             </Link>
+
+            <Link href="/finished-projects" key="finished-projects">
+              <CourseCard
+                title="Finished Projects"
+                description="View completed projects"
+                imageUrl="https://picsum.photos/id/242/300/200" // Replace with a relevant image
+              />
+            </Link>
           </div>
         </div>
       </main>
@@ -63,3 +71,4 @@ export default function Home() {
     </div>
   );
 }
+
