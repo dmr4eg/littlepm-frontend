@@ -7,9 +7,44 @@ import Header from '@/components/Header';
 import {useRouter} from 'next/navigation';
 import {ChevronLeft} from 'lucide-react';
 import Link from 'next/link';
+import {useState, useEffect} from 'react';
+import {Input} from "@/components/ui/input";
 
 const DIYItemsPage = () => {
   const router = useRouter();
+  const [stickPrice, setStickPrice] = useState('');
+  const [feathersPrice, setFeathersPrice] = useState('');
+  const [pomponPrice, setPomponPrice] = useState('');
+  const [ropePrice, setRopePrice] = useState('');
+    const [toyCount, setToyCount] = useState(10);
+
+    useEffect(() => {
+        // Load values from local storage on component mount
+        const storedStickPrice = localStorage.getItem('stickPrice');
+        const storedFeathersPrice = localStorage.getItem('feathersPrice');
+        const storedPomponPrice = localStorage.getItem('pomponPrice');
+        const storedRopePrice = localStorage.getItem('ropePrice');
+        const storedToyCount = localStorage.getItem('toyCount');
+
+        if (storedStickPrice) setStickPrice(storedStickPrice);
+        if (storedFeathersPrice) setFeathersPrice(storedFeathersPrice);
+        if (storedPomponPrice) setPomponPrice(storedPomponPrice);
+        if (storedRopePrice) setRopePrice(storedRopePrice);
+        if (storedToyCount) setToyCount(parseInt(storedToyCount, 10) || 10);
+    }, []);
+
+    // Function to handle changes in input fields and save to local storage
+    const handlePriceChange = (setter: (value: string) => void, key: string, value: string) => {
+        setter(value);
+        localStorage.setItem(key, value);
+    };
+    const handleToyCountChange = (value: string) => {
+        const parsedValue = parseInt(value, 10);
+        if (!isNaN(parsedValue)) {
+            setToyCount(parsedValue);
+            localStorage.setItem('toyCount', parsedValue.toString());
+        }
+    };
 
   return (
     <div className="min-h-screen bg-[hsl(var(--secondary))] font-sans flex flex-col">
@@ -56,13 +91,13 @@ const DIYItemsPage = () => {
 
           <div className="flex items-center justify-center gap-4">
             <div>How many toys you want to sell</div>
-            <Select>
+            <Select onValueChange={handleToyCountChange} value={toyCount.toString()}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="10 Boxes" />
               </SelectTrigger>
               <SelectContent>
                 {[10, 20, 30, 40, 50].map(boxes => (
-                  <SelectItem key={boxes} value={`${boxes} Boxes`}>
+                  <SelectItem key={boxes} value={`${boxes}`}>
                     {boxes} Boxes
                   </SelectItem>
                 ))}
@@ -79,19 +114,43 @@ const DIYItemsPage = () => {
             <ul className="list-none pl-0">
               <li className="flex justify-between items-center py-2">
                 <span>• Stick: 10 pieces</span>
-                <span className="bg-background p-2 rounded-md">2.5 CZK</span>
+                <Input
+                    type="number"
+                    placeholder="2.5 CZK"
+                    className="w-32 text-right"
+                    value={stickPrice}
+                    onChange={(e) => handlePriceChange(setStickPrice, 'stickPrice', e.target.value)}
+                />
               </li>
               <li className="flex justify-between items-center py-2">
                 <span>• Feathers: 5-7 pieces per 1 toy</span>
-                <span className="bg-background p-2 rounded-md">3 CZK</span>
+                <Input
+                    type="number"
+                    placeholder="3 CZK"
+                    className="w-32 text-right"
+                    value={feathersPrice}
+                    onChange={(e) => handlePriceChange(setFeathersPrice, 'feathersPrice', e.target.value)}
+                />
               </li>
               <li className="flex justify-between items-center py-2">
                 <span>• Pompon: big size 10 pieces</span>
-                <span className="bg-background p-2 rounded-md">4 CZK</span>
+                <Input
+                    type="number"
+                    placeholder="4 CZK"
+                    className="w-32 text-right"
+                    value={pomponPrice}
+                    onChange={(e) => handlePriceChange(setPomponPrice, 'pomponPrice', e.target.value)}
+                />
               </li>
               <li className="flex justify-between items-center py-2">
                 <span>• Rope: 50 cm per 1 toy</span>
-                <span className="bg-background p-2 rounded-md">2 CZK</span>
+                <Input
+                    type="number"
+                    placeholder="2 CZK"
+                    className="w-32 text-right"
+                    value={ropePrice}
+                    onChange={(e) => handlePriceChange(setRopePrice, 'ropePrice', e.target.value)}
+                />
               </li>
               <li className="flex justify-between items-center py-2">
                 <span>• Hot glue</span>
@@ -118,4 +177,3 @@ const DIYItemsPage = () => {
 };
 
 export default DIYItemsPage;
-

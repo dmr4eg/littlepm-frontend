@@ -36,7 +36,7 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-secondary">
       <Header />
-      <main className="flex-grow">
+      <main className="flex-grow p-8 border-l border-r border-gray-200">
         <div className="container mx-auto py-10 rounded-3xl">
           <h1 className="text-2xl font-semibold mb-4">Welcome, Chris!</h1>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
