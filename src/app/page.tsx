@@ -40,6 +40,13 @@ export default function Home() {
         <div className="container mx-auto py-10">
           <h1 className="text-2xl font-semibold mb-4">My Projects</h1>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+            <Link href="/finished-projects" key="finished-projects">
+              <CourseCard
+                title="Finished Projects"
+                description="View completed projects"
+                imageUrl="https://picsum.photos/id/242/300/200" // Replace with a relevant image
+              />
+            </Link>
             {projects.map(project => (
               <Link href="/project-dashboard" key={project.id}>
                 <CourseCard
@@ -57,13 +64,7 @@ export default function Home() {
               />
             </Link>
 
-            <Link href="/finished-projects" key="finished-projects">
-              <CourseCard
-                title="Finished Projects"
-                description="View completed projects"
-                imageUrl="https://picsum.photos/id/242/300/200" // Replace with a relevant image
-              />
-            </Link>
+            
           </div>
         </div>
       </main>
