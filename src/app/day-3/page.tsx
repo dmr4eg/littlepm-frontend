@@ -4,12 +4,14 @@ import {Button} from '@/components/ui/button';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import {useRouter} from 'next/navigation';
-import {ChevronLeft, Share2, X} from 'lucide-react';
+import {ChevronLeft} from 'lucide-react';
 import Link from 'next/link';
 import React, {useState, useRef} from 'react';
 import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle} from "@/components/ui/dialog"
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
+import {Input} from "@/components/ui/input";
+import Image from 'next/image';
 
 const DayThreePage = () => {
   const router = useRouter();
@@ -19,6 +21,10 @@ const DayThreePage = () => {
   const [returnPercentage, setReturnPercentage] = useState('');
   const [amountToReturn, setAmountToReturn] = useState('');
   const reportRef = useRef<HTMLDivElement>(null);
+
+  const [investorName, setInvestorName] = useState('');
+  const [investorEmail, setInvestorEmail] = useState('');
+  const [otherExpenses, setOtherExpenses] = useState('');
 
   const calculateAmount = () => {
     const calculatedAmount = parseFloat(expense || '0') + (parseFloat(expense || '0') * parseFloat(returnPercentage || '0') / 100);
@@ -56,10 +62,11 @@ const DayThreePage = () => {
       <main className="flex-grow p-8">
         <div className="bg-[hsl(var(--secondary))] rounded-3xl p-8 flex flex-col gap-6">
           <div className="flex items-center gap-2">
-            <img
+            <Image
               src="https://icons.veryicon.com/png/o/miscellaneous/3d-element-icon/cube-48.png"
               alt="Cat Toy"
-              className="h-6 w-6"
+              width={24}
+              height={24}
             />
             <div className="text-xl">You are doing a &quot;Cat Toy&quot; project with the DIY</div>
           </div>
@@ -75,21 +82,27 @@ const DayThreePage = () => {
               return (
                 <div key={index} className="relative z-10">
                   {isActive ? (
-                    <img
+                    <Image
                       src="https://clipart-library.com/images_k/star-clipart-transparent/star-clipart-transparent-12.png"
                       alt={`Day ${day}`}
+                      width={48}
+                      height={48}
                       className="w-12 h-12"
                     />
                   ) : isCompleted ? (
-                    <img
+                    <Image
                       src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Check_green_icon.svg/1200px-Check_green_icon.svg.png"
                       alt={`Day ${day}`}
-                      className="w-8 h-8 opacity-100"
+                      width={32}
+                      height={32}
+                      className="opacity-100"
                     />
                   ) : (
-                    <img
+                    <Image
                       src="https://static.vecteezy.com/system/resources/previews/009/734/993/original/cute-star-clipart-design-free-png.png"
                       alt={`Day ${day}`}
+                      width={48}
+                      height={48}
                       className="w-12 h-12 opacity-50"
                     />
                   )}
@@ -99,50 +112,48 @@ const DayThreePage = () => {
             })}
           </div>
 
-          <div className="text-center">What other items you might need.</div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex flex-col gap-4">
+              <div>
+                Investor Details
+                <Input
+                  type="text"
+                  placeholder="Enter Name"
+                  value={investorName}
+                  onChange={(e) => setInvestorName(e.target.value)}
+                />
+              </div>
+              <div>
+                <Input
+                  type="text"
+                  placeholder="Enter Email"
+                  value={investorEmail}
+                  onChange={(e) => setInvestorEmail(e.target.value)}
+                />
+              </div>
+              <div>
+                <Input
+                  type="number"
+                  placeholder="Enter Expenses"
+                  value={otherExpenses}
+                  onChange={(e) => setOtherExpenses(e.target.value)}
+                />
+              </div>
 
-          <div>
-            <div className="font-bold"></div>
-            <ul className="list-none pl-0">
-              <li className="flex justify-between items-center py-2">
-                <span>1. Predefined role</span>
-                <input type="text" placeholder="Enter product name" className="border rounded p-1" />
-                <input type="text" placeholder="Enter link" className="border rounded p-1" />
-              </li>
-              <li className="flex justify-between items-center py-2">
-                <span>2. Predefined role</span>
-                <input type="text" placeholder="Enter product name" className="border rounded p-1" />
-                <input type="text" placeholder="Enter link" className="border rounded p-1" />
-              </li>
-              <li className="flex justify-between items-center py-2">
-                <span>3. Predefined role</span>
-                <input type="text" placeholder="Enter product name" className="border rounded p-1" />
-                <input type="text" placeholder="Enter link" className="border rounded p-1" />
-              </li>
-              <li className="flex justify-between items-center py-2">
-                <span>4. Predefined role</span>
-                <input type="text" placeholder="Enter product name" className="border rounded p-1" />
-                <input type="text" placeholder="Enter link" className="border rounded p-1" />
-              </li>
-              <li className="flex justify-between items-center py-2">
-                <span>5. Predefined role</span>
-                 <input type="text" placeholder="Enter product name" className="border rounded p-1" />
-                <input type="text" placeholder="Enter link" className="border rounded p-1" />
-              </li>
-            </ul>
-          </div>
+            </div>
 
-          <div className="flex items-center justify-center gap-4">
-            <video
-              controls
-              className="w-full rounded-md"
-              style={{height: '200px'}}>
-              <source
-                src="https://www.w3schools.com/html/mov_bbb.mp4"
-                type="video/mp4"
-              />
-              <div className="text-sm">About day 3</div>
-            </video>
+            <div className="flex items-center justify-center gap-4">
+              <video
+                controls
+                className="w-full rounded-md"
+                style={{height: '200px'}}>
+                <source
+                  src="https://www.w3schools.com/html/mov_bbb.mp4"
+                  type="video/mp4"
+                />
+                <div className="text-sm">About day 3</div>
+              </video>
+            </div>
           </div>
 
           <div className="flex justify-between">
@@ -152,7 +163,7 @@ const DayThreePage = () => {
                 BACK
               </Button>
             </Link>
-            <Button onClick={() => setOpen(true)}>GENERATE PITCH DECK</Button>
+            <Button onClick={() => setOpen(true)}>GENERATE PITCH DECK →</Button>
           </div>
         </div>
       </main>
@@ -233,13 +244,12 @@ const DayThreePage = () => {
 
           <div className="flex justify-center mt-6">
             <Button variant="outline" onClick={handleShare}>
-              <Share2 className="mr-2 h-4 w-4" />
-              Share
+              GENERATE
             </Button>
           </div>
           <div className="absolute top-4 right-4">
              <Button variant="ghost" size="icon" onClick={() => setOpen(false)}>
-                <X className="h-4 w-4"/>
+                Close
               </Button>
             </div>
         </DialogContent>
@@ -249,4 +259,3 @@ const DayThreePage = () => {
 };
 
 export default DayThreePage;
-
