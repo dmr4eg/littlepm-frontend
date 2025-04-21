@@ -4,60 +4,60 @@ import {Button} from "@/components/ui/button";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import {useRouter} from 'next/navigation';
+import React from 'react';
 import Image from 'next/image';
 import {Textarea} from "@/components/ui/textarea";
-import {useEffect} from "react";
 
 const DaySevenCompletionPage = () => {
   const router = useRouter();
 
-  // Retrieve the sales report data from localStorage
-  useEffect(() => {
-    const soldPrices = localStorage.getItem('soldPrices');
-    const checkboxStates = localStorage.getItem('checkboxStates');
-    const investorAmount = localStorage.getItem('investorAmount');
+  const handleComplete = () => {
+        // Retrieve the sales report data from localStorage
+        const soldPrices = localStorage.getItem('soldPrices');
+        const checkboxStates = localStorage.getItem('checkboxStates');
+        const investorAmount = localStorage.getItem('investorAmount');
 
-    if (!soldPrices || !checkboxStates || !investorAmount) {
-      // Handle missing data appropriately, e.g., redirect to an error page
-      alert('Missing sales data. Please complete the sales process.');
-      router.push('/day-7');
-      return;
-    }
-
-    try {
-      const soldPricesData = JSON.parse(soldPrices);
-      const checkboxStatesData = JSON.parse(checkboxStates);
-      const investorAmountData = parseFloat(investorAmount);
-
-      // Calculate total sold amount
-      let totalSold = 0;
-      Object.keys(soldPricesData).forEach(key => {
-        if (checkboxStatesData[key]) {
-          totalSold += parseFloat(soldPricesData[key] || '0');
+        if (!soldPrices || !checkboxStates || !investorAmount) {
+          // Handle missing data appropriately, e.g., redirect to an error page
+          alert('Missing sales data. Please complete the sales process.');
+          router.push('/day-7');
+          return;
         }
-      });
 
-      // Calculate total spent (assuming a fixed expense per toy)
-      const expensePerToy = 10; // Example expense, adjust as needed
-      const totalExpense = expensePerToy * 12; //total expense for 12 planned toys
+        try {
+          const soldPricesData = JSON.parse(soldPrices);
+          const checkboxStatesData = JSON.parse(checkboxStates);
+          const investorAmountData = parseFloat(investorAmount);
 
-      //Calculate profit before sharing with helpers
-      const profitBeforeSharing = totalSold - totalExpense;
+          // Calculate total sold amount
+          let totalSold = 0;
+          Object.keys(soldPricesData).forEach(key => {
+            if (checkboxStatesData[key]) {
+              totalSold += parseFloat(soldPricesData[key] || '0');
+            }
+          });
 
-      if (profitBeforeSharing > 0) {
-        router.push('/project-success');
-      } else {
-        router.push('/project-failure');
-      }
-    } catch (error) {
-      console.error('Error calculating profit or parsing data:', error);
-      alert('Error processing sales data. Please try again.');
-      router.push('/day-7');
-    }
-  }, [router]); // Include router in the dependency array
+          // Calculate total spent (assuming a fixed expense per toy)
+          const expensePerToy = 10; // Example expense, adjust as needed
+          const totalExpense = expensePerToy * 12; //total expense for 12 planned toys
+
+          //Calculate profit before sharing with helpers
+          const profitBeforeSharing = totalSold - totalExpense;
+
+          if (profitBeforeSharing > 0) {
+            router.push('/project-success');
+          } else {
+            router.push('/project-failure');
+          }
+        } catch (error) {
+          console.error('Error calculating profit or parsing data:', error);
+          alert('Error processing sales data. Please try again.');
+          router.push('/day-7');
+        }
+  };
 
   return (
-    <div className="min-h-screen bg-[#FAF0E6] font-sans flex flex-col">
+    <div className="min-h-screen bg-[hsl(var(--secondary))] font-sans flex flex-col">
       <Header/>
 
       <main className="flex-grow p-8">
@@ -134,7 +134,7 @@ const DaySevenCompletionPage = () => {
           </div>
 
           <div className="flex justify-end">
-            <Button onClick={() => router.push('/')}>
+            <Button onClick={handleComplete}>
               Complete Day 7 →
             </Button>
           </div>
