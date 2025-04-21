@@ -49,10 +49,16 @@ export default function UserProjectsPage() {
               </Link>
             ))}
           </div>
+           <div className="flex justify-center mt-6">
+            <Link href="/">
+              <Button>Return to Home</Button>
+            </Link>
+          </div>
         </div>
       </main>
       <Footer />
     </div>
   );
 }
+
 
