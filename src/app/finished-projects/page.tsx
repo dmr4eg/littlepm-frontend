@@ -49,10 +49,14 @@ export default function FinishedProjectsPage() {
               </div>
             ))}
           </div>
+          <Link href="/">
+            <Button>Return to Home</Button>
+          </Link>
         </div>
       </main>
       <Footer />
     </div>
   );
 }
+
 
