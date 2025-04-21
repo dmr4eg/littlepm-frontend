@@ -1,0 +1,1 @@
+//  TODO render text from openapi object 

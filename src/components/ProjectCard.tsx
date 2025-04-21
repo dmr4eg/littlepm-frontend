@@ -1,13 +1,13 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-interface CourseCardProps {
+interface ProjectCardProps {
   title: string;
   description: string;
   imageUrl: string;
 }
 
-const CourseCard: React.FC<CourseCardProps> = ({ title, description, imageUrl }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ title, description, imageUrl }) => {
   return (
     <Card className="hover:shadow-md transition-shadow duration-300">
       <CardHeader>
@@ -25,4 +25,4 @@ const CourseCard: React.FC<CourseCardProps> = ({ title, description, imageUrl })
   );
 };
 
-export default CourseCard;
+export default ProjectCard;

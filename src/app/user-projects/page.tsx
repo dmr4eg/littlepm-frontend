@@ -1,6 +1,6 @@
 'use client';
 
-import CourseCard from '@/components/CourseCard';
+import ProjectCard from '@/components/ProjectCard';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import Link from 'next/link';
@@ -41,7 +41,7 @@ export default function UserProjectsPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
             {projects.map(project => (
               <Link href="/project-dashboard" key={project.id}>
-                <CourseCard
+                <ProjectCard
                   title={project.name}
                   description={project.status}
                   imageUrl={project.imageUrl}

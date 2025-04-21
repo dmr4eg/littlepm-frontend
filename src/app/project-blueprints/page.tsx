@@ -1,6 +1,6 @@
 'use client';
 
-import CourseCard from '@/components/CourseCard';
+import ProjectCard from '@/components/ProjectCard';
 import {Button} from '@/components/ui/button';
 import {useRouter} from 'next/navigation';
 import Footer from '@/components/Footer';
@@ -49,7 +49,7 @@ const UserProjectsPage = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 p-6">
           {courses.map((course, index) => (
             <Link href="/project-dashboard" key={index}>
-              <CourseCard
+              <ProjectCard
                 title={course.title}
                 description={course.description}
                 imageUrl={course.imageUrl}

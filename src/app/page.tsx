@@ -1,7 +1,7 @@
 'use client';
 
 
-import CourseCard from '@/components/CourseCard';
+import ProjectCard from '@/components/ProjectCard';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import Link from 'next/link';
@@ -41,21 +41,21 @@ export default function Home() {
           <h1 className="text-2xl font-semibold mb-4">Welcome, Chris!</h1>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
             <Link href="/finished-projects" key="finished-projects">
-              <CourseCard
+              <ProjectCard
                 title="Your Finished Project Results"
                 description=""
                 imageUrl="https://picsum.photos/id/242/300/200" // Replace with a relevant image
               />
             </Link>
               <Link href="/user-projects" key="user-projects">
-                <CourseCard
+                <ProjectCard
                   title="Your Projects In Progress"
                   description=""
                   imageUrl="https://picsum.photos/id/237/300/200"
                 />
               </Link>
              <Link href="/project-blueprints" key="create-project">
-              <CourseCard
+              <ProjectCard
                 title="Start new business project"
                 description=""
                 imageUrl="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'%3E%3Cline x1='12' y1='5' x2='12' y2='19'/%3E%3Cline x1='5' y1='12' x2='19' y2='12'/%3E%3C/svg%3E"
