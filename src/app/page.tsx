@@ -34,23 +34,29 @@ export default function Home() {
   const router = useRouter();
 
   return (
-    <div className="container mx-auto py-10">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-semibold">My Projects</h1>
-        <Button onClick={() => router.push('/create-project')}>Create Project</Button>
-      </div>
+    <div className="flex flex-col min-h-screen bg-secondary">
+    <Header />
+    <main className="flex-grow">
+        <div className="container mx-auto py-10">
+          <div className="flex justify-between items-center mb-4">
+            <h1 className="text-2xl font-semibold">My Projects</h1>
+            <Button onClick={() => router.push('/project-dashboard')}>Create Project</Button>
+          </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
-        {projects.map(project => (
-          <Link href="/project-dashboard" key={project.id}>
-            <CourseCard
-              title={project.name}
-              description={project.status}
-              imageUrl={project.imageUrl}
-            />
-          </Link>
-        ))}
-      </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+            {projects.map(project => (
+              <Link href="/project-dashboard" key={project.id}>
+                <CourseCard
+                  title={project.name}
+                  description={project.status}
+                  imageUrl={project.imageUrl}
+                />
+              </Link>
+            ))}
+          </div>
+        </div>
+      </main>
+      <Footer />
     </div>
   );
 }
