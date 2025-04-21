@@ -13,7 +13,7 @@ const ProjectFailurePage = () => {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-[#FAF0E6] font-sans flex flex-col">
+    <div className="min-h-screen bg-[hsl(var(--secondary))] font-sans flex flex-col">
       <Header />
 
       <main className="flex-grow p-8">
@@ -60,7 +60,7 @@ const ProjectFailurePage = () => {
             })}
           </div>
 
-          <div className="text-center">You did not made it, better luck next time!</div>
+          <div className="text-center">You made it!</div>
 
           <div className="flex items-center justify-center gap-4">
             <Image
@@ -70,7 +70,8 @@ const ProjectFailurePage = () => {
               height={100}
             />
 
-            <div>Maybe next time investor will give you the money.</div>
+            <div>You launched your first business and it's ok if you haven't made money. You got your experience and
+            the next time you will be more successful.</div>
           </div>
 
           <div className="flex items-center justify-center gap-4">
@@ -87,9 +88,11 @@ const ProjectFailurePage = () => {
           </div>
 
           <div className="flex justify-center">
-            <Button onClick={() => router.push('/')}>
-              Complete Project
-            </Button>
+          <Link href="/">
+              <Button>
+                Complete Project
+              </Button>
+            </Link>
           </div>
         </div>
       </main>
@@ -100,3 +103,4 @@ const ProjectFailurePage = () => {
 };
 
 export default ProjectFailurePage;
+
