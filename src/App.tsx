@@ -9,14 +9,11 @@
 // url = /projects/{blueprintuuid} page = project page ()
 // url = /reg Page = Reg page 
 // url = / page = Root Page
-
 import React from 'react';
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate,
-} from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+
+import Header from './components/Header';
+import Footer from './components/Footer';
 
 import RootPage from './pages/RootPage';
 import DashboardPage from './pages/DashboardPage';
@@ -30,45 +27,55 @@ import CreateProjectPage from './pages/CreateProjectPage';
 import ProjectPage from './pages/ProjectPage';
 import RegPage from './pages/RegPage';
 
-const AppRoutes: React.FC = () => (
+const App: React.FC = () => (
   <BrowserRouter>
-    <Routes>
-      {/* Home */}
-      <Route path="/" element={<RootPage />} />
+    <div className="flex flex-col min-h-screen bg-secondary">
+      <Header />
 
-      {/* Projects list & creation */}
-      <Route path="/projects" element={<DashboardPage />} />
-      <Route path="/projects/new" element={<CreateProjectPage />} />
-      <Route path="/projects/:blueprintuuid" element={<ProjectPage />} />
+      <main className="flex-grow p-8 border-l border-r border-gray-200">
+        <div className="container mx-auto py-10 rounded-3xl">
+          <Routes>
+            {/* Home */}
+            <Route path="/" element={<RootPage />} />
 
-      {/* Single project flow */}
-      <Route
-        path="/project/:projectblueprintuuid/day/:dayorder"
-        element={<DayPage />}
-      />
-      <Route
-        path="/project/:projectblueprintuuid/day/next/:dayorder"
-        element={<DayTransitPage />}
-      />
-      <Route
-        path="/project/:projectblueprintuuid/complete"
-        element={<ProjectCompletePage />}
-      />
+            {/* Projects list & creation */}
+            <Route path="/projects" element={<DashboardPage />} />
+            <Route path="/projects/new" element={<CreateProjectPage />} />
+            <Route path="/projects/:blueprintuuid" element={<ProjectPage />} />
 
-      {/* Auth */}
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/logout" element={<LogoutPage />} />
+            {/* Single project flow */}
+            <Route
+              path="/project/:projectblueprintuuid/day/:dayorder"
+              element={<DayPage />}
+            />
+            <Route
+              path="/project/:projectblueprintuuid/day/next/:dayorder"
+              element={<DayTransitPage />}
+            />
+            <Route
+              path="/project/:projectblueprintuuid/complete"
+              element={<ProjectCompletePage />}
+            />
 
-      {/* User */}
-      <Route path="/profile" element={<ProfilePage />} />
+            {/* Auth */}
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/logout" element={<LogoutPage />} />
 
-      {/* Registration */}
-      <Route path="/reg" element={<RegPage />} />
+            {/* User */}
+            <Route path="/profile" element={<ProfilePage />} />
 
-      {/* Catch-all: redirect unknown paths to home (optional) */}
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+            {/* Registration */}
+            <Route path="/reg" element={<RegPage />} />
+
+            {/* Catch-all: redirect unknown paths to home */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </div>
+      </main>
+
+      <Footer />
+    </div>
   </BrowserRouter>
 );
 
-export default AppRoutes;
+export default App;
