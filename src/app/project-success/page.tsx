@@ -70,7 +70,8 @@ const ProjectSuccessPage = () => {
               height={100}
             />
 
-            <div>Investor gave you the money, now you can buy all items to make toys.</div>
+            <div>Congratulations!
+            Investor gave you the money, now you can buy all items to make toys.</div>
           </div>
 
           <div className="flex items-center justify-center gap-4">
@@ -87,9 +88,12 @@ const ProjectSuccessPage = () => {
           </div>
 
           <div className="flex justify-center">
-            <Button onClick={() => router.push('/')}>
-              Complete Project
-            </Button>
+          <Link href="/">
+              <Button>
+              <CheckCircle className="mr-2 h-4 w-4" />
+                Complete Project
+              </Button>
+            </Link>
           </div>
         </div>
       </main>
@@ -100,3 +104,4 @@ const ProjectSuccessPage = () => {
 };
 
 export default ProjectSuccessPage;
+
