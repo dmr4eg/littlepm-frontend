@@ -1,2 +1,0 @@
-// url = /projects
-// page = dashboardPage ()
