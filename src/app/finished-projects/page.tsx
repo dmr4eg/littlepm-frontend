@@ -49,9 +49,11 @@ export default function FinishedProjectsPage() {
               </div>
             ))}
           </div>
-          <Link href="/">
-            <Button>Return to Home</Button>
-          </Link>
+          <div className="flex justify-center mt-6">
+            <Link href="/">
+              <Button>Return to Home</Button>
+            </Link>
+          </div>
         </div>
       </main>
       <Footer />
