@@ -1,8 +1,8 @@
 'use client';
 
-import {Button} from '@/components/ui/button';
-import Footer from '@/components/Footer';
-import Header from '@/components/Header';
+import {Button} from "@/components/ui/button";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {useRouter} from 'next/navigation';
 import Image from 'next/image';
@@ -63,12 +63,30 @@ const DaySevenPage = () => {
     }));
   };
 
-  const handleCheckboxChange = (index: number) => {
-    setCheckboxStates(prev => ({
-      ...prev,
-      [`toy-${index}`]: !prev[`toy-${index}`],
-    }));
-  };
+    const handleCheckboxChange = (index: number) => {
+        const toyId = `toy-${index}`;
+        const newCheckboxState = !checkboxStates[toyId];
+
+        // If the checkbox is being checked, also save the corresponding price to local storage
+        if (newCheckboxState) {
+            const price = soldPrices[toyId] || ''; // Get the current price from the state
+            localStorage.setItem(`soldPrice-${index}`, price);
+        } else {
+            // If the checkbox is being unchecked, remove the corresponding price from local storage
+            localStorage.removeItem(`soldPrice-${index}`);
+        }
+
+        setCheckboxStates(prev => {
+            const updatedCheckboxStates = {...prev, [toyId]: newCheckboxState};
+            localStorage.setItem('checkboxStates', JSON.stringify(updatedCheckboxStates));
+            return updatedCheckboxStates;
+        });
+
+        // Disable the checkbox immediately after it's clicked
+        setTimeout(() => {
+            setCheckboxStates(prev => ({...prev, [toyId]: newCheckboxState}));
+        }, 0);
+    };
 
   const calculateSalesReport = () => {
       let totalSold = 0;
@@ -203,29 +221,32 @@ const DaySevenPage = () => {
           <div>
             <div className="font-bold">Log here details of the sold toys</div>
             <ul className="list-none pl-0">
-              {Array.from({length: 12}).map((_, index) => (
-                <li key={index} className="flex justify-between items-center py-2">
-                  <div className="flex items-center">
-                    <Checkbox
-                      id={`toy-${index}`}
-                      checked={checkboxStates[`toy-${index}`] || false}
-                      onCheckedChange={() => handleCheckboxChange(index)}
-                      disabled={checkboxStates[`toy-${index}`] || false}
-                    />
-                    <label htmlFor={`toy-${index}`} className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                      Enter Sold Price (CZK)
-                    </label>
-                  </div>
-                  <input
-                    type="text"
-                    placeholder="00.00 CZK"
-                    className="border rounded p-1 w-32 text-right"
-                    value={soldPrices[`toy-${index}`] || ''}
-                    onChange={(e) => handlePriceChange(index, e.target.value)}
-                    disabled={!checkboxStates[`toy-${index}`]}
-                  />
-                </li>
-              ))}
+              {Array.from({length: 12}).map((_, index) => {
+                  const toyId = `toy-${index}`;
+                  return (
+                    <li key={index} className="flex justify-between items-center py-2">
+                      <div className="flex items-center">
+                        <Checkbox
+                          id={toyId}
+                          checked={checkboxStates[toyId] || false}
+                          onCheckedChange={() => handleCheckboxChange(index)}
+                          disabled={checkboxStates[toyId] || false}
+                        />
+                        <label htmlFor={toyId} className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                          Enter Sold Price (CZK)
+                        </label>
+                      </div>
+                      <input
+                        type="text"
+                        placeholder="00.00 CZK"
+                        className="border rounded p-1 w-32 text-right"
+                        value={soldPrices[toyId] || ''}
+                        onChange={(e) => handlePriceChange(index, e.target.value)}
+                        disabled={checkboxStates[toyId] !== undefined}
+                      />
+                    </li>
+                  );
+                })}
             </ul>
           </div>
 
