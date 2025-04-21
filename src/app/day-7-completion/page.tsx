@@ -44,6 +44,11 @@ const DaySevenCompletionPage = () => {
           //Calculate profit before sharing with helpers
           const profitBeforeSharing = totalSold - totalExpense;
 
+          // Clear local storage data after successful project completion
+          localStorage.removeItem('soldPrices');
+          localStorage.removeItem('checkboxStates');
+          localStorage.removeItem('investorAmount');
+
           if (profitBeforeSharing > 0) {
             router.push('/project-success');
           } else {
