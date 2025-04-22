@@ -1,68 +1,46 @@
 import React, { useState } from 'react';
-import { ApiClient } from '../api/ApiClient';
 
-interface Task {
+interface ChecklistItem {
     id: string;
-    title: string;
+    text: string;
     completed: boolean;
 }
 
 interface DayChecklistProps {
-    dayId: string;
-    tasks: Task[];
+    items: ChecklistItem[];
 }
 
-export const DayChecklist: React.FC<DayChecklistProps> = ({ dayId, tasks }) => {
-    const [taskList, setTaskList] = useState<Task[]>(tasks);
-    const [isSubmitting, setIsSubmitting] = useState(false);
+const DayChecklist: React.FC<DayChecklistProps> = ({ items }) => {
+    const [checklistItems, setChecklistItems] = useState<ChecklistItem[]>(items);
 
-    const handleTaskToggle = async (taskId: string) => {
-        const updatedTasks = taskList.map(task =>
-            task.id === taskId ? { ...task, completed: !task.completed } : task
+    const toggleItem = (itemId: string) => {
+        setChecklistItems(prevItems =>
+            prevItems.map(item =>
+                item.id === itemId ? { ...item, completed: !item.completed } : item
+            )
         );
-        setTaskList(updatedTasks);
-
-        try {
-            setIsSubmitting(true);
-            const apiClient = new ApiClient();
-            await apiClient.days.updateDayTasks(dayId, updatedTasks);
-        } catch (error) {
-            console.error('Failed to update tasks:', error);
-            // Revert the change if the update fails
-            setTaskList(tasks);
-        } finally {
-            setIsSubmitting(false);
-        }
     };
 
-    const allTasksCompleted = taskList.every(task => task.completed);
-
     return (
-        <div className="day-checklist">
-            <h2>Tasks</h2>
-            <ul>
-                {taskList.map(task => (
-                    <li key={task.id}>
-                        <label>
-                            <input
-                                type="checkbox"
-                                checked={task.completed}
-                                onChange={() => handleTaskToggle(task.id)}
-                                disabled={isSubmitting}
-                            />
-                            {task.title}
-                        </label>
+        <div className="space-y-4">
+            <h2 className="text-xl font-semibold">Checklist</h2>
+            <ul className="space-y-2">
+                {checklistItems.map(item => (
+                    <li key={item.id} className="flex items-center">
+                        <input
+                            type="checkbox"
+                            checked={item.completed}
+                            onChange={() => toggleItem(item.id)}
+                            className="mr-2 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                        />
+                        <span className={item.completed ? 'line-through text-gray-500' : ''}>
+                            {item.text}
+                        </span>
                     </li>
                 ))}
             </ul>
-            {allTasksCompleted && (
-                <button
-                    className="complete-day-button"
-                    disabled={isSubmitting}
-                >
-                    Complete Day
-                </button>
-            )}
         </div>
     );
-}; 
+};
+
+export { DayChecklist }; 

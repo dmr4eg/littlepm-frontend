@@ -3,57 +3,61 @@
 // const DayPage = (useruuid, projectuuid, dayuuid) -> Component
 // 2. button next redirects to daytransit route
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { DayDTO } from '../api/models/DayDTO';
-import { DayBlueprint } from '../api/models/DayBlueprint';
-import { DayInstance } from '../api/models/DayInstance';
-import { useDay } from '../hooks/useDay';
+import { Day } from '../types';
 import { DayContent } from '../components/DayContent';
 import { DayChecklist } from '../components/DayChecklist';
 import { DayCompletion } from '../components/DayCompletion';
 
-interface DayPageProps {
-    dayId: string;
-}
+const DayPage: React.FC = () => {
+    const { projectblueprintuuid, dayorder } = useParams<{ projectblueprintuuid: string; dayorder: string }>();
+    const [day, setDay] = useState<Day | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-export const DayPage: React.FC<DayPageProps> = ({ dayId }) => {
-    const { data: day, isLoading, error } = useDay(dayId);
+    useEffect(() => {
+        const fetchDay = async () => {
+            try {
+                const response = await fetch(`/api/projects/${projectblueprintuuid}/days/${dayorder}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch day data');
+                }
+                const data = await response.json();
+                setDay(data);
+            } catch (err) {
+                setError(err instanceof Error ? err.message : 'An error occurred');
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
+        fetchDay();
+    }, [projectblueprintuuid, dayorder]);
 
-    if (error) {
-        return <div>Error loading day: {error.message}</div>;
-    }
-
-    if (!day) {
-        return <div>Day not found</div>;
-    }
-
-    const { blueprint, instance } = day;
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error}</div>;
+    if (!day) return <div>Day not found</div>;
 
     return (
-        <div className="day-page">
-            <h1>{blueprint.title}</h1>
-            {blueprint.description && <p>{blueprint.description}</p>}
+        <div className="space-y-8">
+            <h1 className="text-3xl font-bold">{day.title}</h1>
+            <p className="text-lg">{day.description}</p>
 
-            <DayContent content={blueprint.text} />
-
-            {instance.status === 'IN_PROGRESS' && (
-                <DayChecklist
-                    dayId={dayId}
-                    tasks={blueprint.tasks || []}
-                />
-            )}
-
-            {instance.status === 'COMPLETED' && (
-                <DayCompletion
-                    dayId={dayId}
-                    completionData={instance.completionData}
-                />
-            )}
+            {day.content.map((item: Day['content'][0], index: number) => {
+                switch (item.type) {
+                    case 'text':
+                        return <DayContent key={index} content={item.data} />;
+                    case 'checklist':
+                        return <DayChecklist key={index} items={item.data} />;
+                    case 'completion':
+                        return <DayCompletion key={index} onComplete={() => { }} />;
+                    default:
+                        return null;
+                }
+            })}
         </div>
     );
 };
+
+export default DayPage;

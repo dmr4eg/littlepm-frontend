@@ -1,7 +1,8 @@
 // import { StrictMode } from 'react'
 
+import React from 'react';
 import './styles/index.css'
-import App from './App.tsx'
+import App from './App'
 // import {ReactKeycloakProvider} from "@react-keycloak/web";
 // import {initOptions, keycloak} from "./config/keycloakConfig.ts";
 // import loadingPage from "./pages/LoadingPage.tsx";
@@ -11,18 +12,18 @@ import { createRoot } from 'react-dom/client';
 const container = document.getElementById('root')!;
 const root = createRoot(container);        // ← from react-dom/client
 root.render(
-
-    // <ReactKeycloakProvider
-    //     authClient={keycloak}
-    //     initOptions={initOptions}
-    //     LoadingComponent={loadingPage(
-    //         "Keycloak is loading",
-    //         "Loading"
-    //     )}
-    // >
-        <App />
-    // </ReactKeycloakProvider>
-
+    // <React.StrictMode>
+    //  <ReactKeycloakProvider
+    //              authClient={keycloak}
+    //              initOptions={initOptions}
+    //              LoadingComponent={loadingPage(
+    //                  "Keycloak is loading",
+    //                  "Loading"
+    //              )}
+    //          >
+            <App />
+  //    </ReactKeycloakProvider>
+  // </React.StrictMode >
 );
 
 // If you want to start measuring performance in your app, pass a function

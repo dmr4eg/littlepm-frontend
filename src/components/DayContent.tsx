@@ -4,10 +4,12 @@ interface DayContentProps {
     content: string;
 }
 
-export const DayContent: React.FC<DayContentProps> = ({ content }) => {
+const DayContent: React.FC<DayContentProps> = ({ content }) => {
     return (
-        <div className="day-content">
+        <div className="prose max-w-none">
             <div dangerouslySetInnerHTML={{ __html: content }} />
         </div>
     );
-}; 
+};
+
+export { DayContent }; 

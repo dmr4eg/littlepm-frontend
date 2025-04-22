@@ -70,7 +70,7 @@ const ProjectFailurePage = () => {
               height={100}
             />
 
-            <div>You launched your first business and it's ok if you haven't made money. You got your experience and
+            <div>You launched your first business and its ok if you havent made money. You got your experience and
             the next time you will be more successful.</div>
           </div>
 

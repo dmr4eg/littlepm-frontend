@@ -1,40 +1,22 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-
-interface CompletionData {
-    completedAt: string;
-    nextDayId?: string;
-}
 
 interface DayCompletionProps {
-    dayId: string;
-    completionData: CompletionData;
+    onComplete: () => void;
 }
 
-export const DayCompletion: React.FC<DayCompletionProps> = ({
-    dayId,
-    completionData
-}) => {
+const DayCompletion: React.FC<DayCompletionProps> = ({ onComplete }) => {
     return (
-        <div className="day-completion">
-            <h2>Day Completed!</h2>
-            <p>Completed on: {new Date(completionData.completedAt).toLocaleDateString()}</p>
-
-            {completionData.nextDayId ? (
-                <Link
-                    to={`/day/${completionData.nextDayId}`}
-                    className="next-day-button"
-                >
-                    Continue to Next Day
-                </Link>
-            ) : (
-                <Link
-                    to="/project-complete"
-                    className="project-complete-button"
-                >
-                    Project Complete!
-                </Link>
-            )}
+        <div className="text-center space-y-4">
+            <h2 className="text-2xl font-bold text-green-600">Day Completed!</h2>
+            <p className="text-lg">Great job! You've completed all the tasks for this day.</p>
+            <button
+                onClick={onComplete}
+                className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
+            >
+                Continue to Next Day
+            </button>
         </div>
     );
-}; 
+};
+
+export { DayCompletion }; 
