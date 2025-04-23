@@ -7,7 +7,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import api from '../api/api';
+import DefaultApi from '../api/controllers/DefaultApi';
 import ProjectDTO from '../api/models/ProjectDTO';
 import ProjectInstance from '../api/models/ProjectInstance';
 
@@ -23,6 +23,7 @@ const ProjectPage = () => {
             if (!projectId) return;
 
             try {
+                const api = new DefaultApi();
                 const response = await new Promise<ProjectDTO>((resolve, reject) => {
                     api.projectsProjectBlueprintUuidGet(projectId as string, (error: Error | null, data: ProjectDTO) => {
                         if (error) reject(error);

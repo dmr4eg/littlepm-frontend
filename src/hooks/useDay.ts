@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import api from '../api/api';
+import DefaultApi from '../api/controllers/DefaultApi';
 import DayDTO from '../api/models/DayDTO';
 
 export const useDay = (dayId: string) => {
@@ -10,6 +10,7 @@ export const useDay = (dayId: string) => {
     useEffect(() => {
         const fetchDay = async () => {
             try {
+                const api = new DefaultApi();
                 const response = await new Promise<DayDTO>((resolve, reject) => {
                     api.daysDayBlueprintUuidGet(dayId, (error: Error | null, data: DayDTO) => {
                         if (error) reject(error);

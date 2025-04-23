@@ -7,7 +7,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import api from '../api/api';
+import DefaultApi from '../api/controllers/DefaultApi';
 import ProjectBlueprint from '../api/models/ProjectBlueprint';
 import ProjectDTO from '../api/models/ProjectDTO';
 
@@ -20,6 +20,7 @@ const ProjectCreatePage = () => {
     useEffect(() => {
         const fetchBlueprints = async () => {
             try {
+                const api = new DefaultApi();
                 const response = await new Promise<ProjectBlueprint[]>((resolve, reject) => {
                     api.projectsGet(100, 0, (error: Error | null, data: ProjectBlueprint[]) => {
                         if (error) reject(error);
@@ -39,6 +40,7 @@ const ProjectCreatePage = () => {
 
     const handleCreateProject = async (blueprintId: string) => {
         try {
+            const api = new DefaultApi();
             const response = await new Promise<ProjectDTO>((resolve, reject) => {
                 api.projectsPost({
                     blueprint: blueprintId,

@@ -7,7 +7,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import api from '../api/api';
+import DefaultApi from '../api/controllers/DefaultApi';
 import Members from '../api/models/Members';
 
 const RegistrationPage = () => {
@@ -22,6 +22,7 @@ const RegistrationPage = () => {
         setError(null);
 
         try {
+            const api = new DefaultApi();
             await new Promise<Members>((resolve, reject) => {
                 api.membersPost({
                     id: {

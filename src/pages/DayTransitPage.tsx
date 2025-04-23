@@ -5,7 +5,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import ApiClient from '../api/ApiClient';
+import DefaultApi from '../api/controllers/DefaultApi';
+import ProjectDaysMapper from '../api/models/ProjectDaysMapper';
 
 interface DayTransition {
     currentDayOrder: number;
@@ -26,15 +27,31 @@ const DayTransitPage = () => {
             if (!projectId || !dayOrder) return;
 
             try {
-                const apiClient = new ApiClient();
-                const response = await apiClient.days.getDayTransition(
-                    projectId as string,
-                    parseInt(dayOrder as string)
-                );
-                setTransition(response);
+                const api = new DefaultApi();
+                const response = await new Promise<ProjectDaysMapper[]>((resolve, reject) => {
+                    api.projectDaysMapperGet(100, 0, (error: Error | null, data: ProjectDaysMapper[]) => {
+                        if (error) reject(error);
+                        else resolve(data);
+                    });
+                });
+
+                // Filter mappers for this project and sort by sort order
+                const projectMappers = response
+                    .filter(mapper => mapper.id.project_blueprint_uuid === projectId)
+                    .sort((a, b) => a.sortOrder - b.sortOrder);
+
+                const currentDayIndex = projectMappers.findIndex(mapper => mapper.sortOrder === parseInt(dayOrder as string));
+                const nextDayIndex = currentDayIndex + 1;
+
+                setTransition({
+                    currentDayOrder: parseInt(dayOrder as string),
+                    nextDayOrder: nextDayIndex < projectMappers.length ? projectMappers[nextDayIndex].sortOrder : undefined,
+                    totalDays: projectMappers.length,
+                    projectId: projectId as string
+                });
 
                 // If there's no next day, redirect to project completion
-                if (!response.nextDayOrder) {
+                if (nextDayIndex >= projectMappers.length) {
                     router.push(`/project/${projectId}/complete`);
                 }
             } catch (err) {

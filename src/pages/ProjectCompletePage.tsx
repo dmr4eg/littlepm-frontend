@@ -5,19 +5,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import ApiClient from '../api/ApiClient';
-
-interface ProjectDetails {
-    id: string;
-    title: string;
-    description: string;
-    completionDate?: string;
-}
+import DefaultApi from '../api/controllers/DefaultApi';
+import ProjectDTO from '../api/models/ProjectDTO';
 
 const ProjectCompletePage = () => {
     const router = useRouter();
     const { projectId } = router.query;
-    const [project, setProject] = useState<ProjectDetails | null>(null);
+    const [project, setProject] = useState<ProjectDTO | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
 
@@ -26,8 +20,13 @@ const ProjectCompletePage = () => {
             if (!projectId) return;
 
             try {
-                const apiClient = new ApiClient();
-                const response = await apiClient.getProjectDetails(projectId as string);
+                const api = new DefaultApi();
+                const response = await new Promise<ProjectDTO>((resolve, reject) => {
+                    api.projectsProjectBlueprintUuidGet(projectId as string, (error: Error | null, data: ProjectDTO) => {
+                        if (error) reject(error);
+                        else resolve(data);
+                    });
+                });
                 setProject(response);
             } catch (err) {
                 setError(err instanceof Error ? err : new Error('Failed to fetch project details'));
@@ -55,10 +54,10 @@ const ProjectCompletePage = () => {
         <div className="project-complete-page">
             <h1>Congratulations!</h1>
             <div className="completion-message">
-                <h2>You've completed {project.title}!</h2>
-                <p>{project.description}</p>
-                {project.completionDate && (
-                    <p>Completed on: {new Date(project.completionDate).toLocaleDateString()}</p>
+                <h2>You've completed {project.blueprint.title}!</h2>
+                <p>{project.blueprint.description}</p>
+                {project.instance.completionDate && (
+                    <p>Completed on: {new Date(project.instance.completionDate).toLocaleDateString()}</p>
                 )}
             </div>
             <button
