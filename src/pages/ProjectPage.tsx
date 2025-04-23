@@ -10,48 +10,55 @@ import { useRouter } from 'next/router';
 import DefaultApi from '../api/controllers/DefaultApi';
 import ProjectDTO from '../api/models/ProjectDTO';
 import ProjectInstance from '../api/models/ProjectInstance';
+import api from '../api/api';
 
 const ProjectPage = () => {
     const router = useRouter();
     const { projectId } = router.query;
     const [project, setProject] = useState<ProjectDTO | null>(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<Error | null>(null);
+    const [error, setError] = useState<String | null>(null);
 
+    /**
+    * This effect fetches the project details when the component mounts or when the projectId changes.
+    * It sets the loading state, handles errors, and updates the project state.
+    **/
     useEffect(() => {
-        const fetchProjectDetails = async () => {
-            if (!projectId) return;
+        const callback = (error: Error | null, data: ProjectDTO) => {
+            if (error) setError(error.message)
+            else setProject(data);
+            setIsLoading(false);
+        }
 
+        const loadProject = async () => {
+            if (!projectId) {
+                setError('Project ID is required');
+                setIsLoading(false);
+                return;
+            }
             try {
-                const api = new DefaultApi();
-                const response = await new Promise<ProjectDTO>((resolve, reject) => {
-                    api.projectsProjectBlueprintUuidGet(projectId as string, (error: Error | null, data: ProjectDTO) => {
-                        if (error) reject(error);
-                        else resolve(data);
-                    });
-                });
-                setProject(response);
-
-                // If project is in progress, redirect to the current day
-                if (response.instance.status === ProjectInstance.StatusEnum.IN_PROGRESS) {
-                    router.push(`/project/${projectId}/day/1`);
-                }
-            } catch (err) {
-                setError(err instanceof Error ? err : new Error('Failed to fetch project details'));
+                // Assumes your SDK method already returns a Promise
+                await api.projectsProjectBlueprintUuidGet(projectId as string, callback);
+            } catch (e) {
+                setError(e instanceof Error ? e.message : 'Failed to fetch project details');
             } finally {
                 setIsLoading(false);
             }
         };
 
-        fetchProjectDetails();
+        loadProject();
     }, [projectId, router]);
+
+    // TODO create setproject checker for check project update
+    // if project instance state is new, redirect to welcome page
+    // else redirect ot last day
 
     if (isLoading) {
         return <div>Loading...</div>;
     }
 
     if (error) {
-        return <div>Error: {error.message}</div>;
+        return <div>Error: {error}</div>;
     }
 
     if (!project) {

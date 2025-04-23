@@ -1,7 +1,7 @@
 import DefaultApi from './controllers/DefaultApi';
 import ApiClient from './ApiClient';
 
-// Create a singleton instance
-const api = new DefaultApi(ApiClient.instance);
+// TODO use configs json
+const api = new DefaultApi(new ApiClient(config.url.API_BASE_URL));
 
 export default api; 
