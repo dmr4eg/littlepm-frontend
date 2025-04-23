@@ -5,13 +5,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import ApiClient from '../api/ApiClient';
+import api from '../api/api';
 
 interface UserProfile {
     id: string;
-    email: string;
     name: string;
-    avatarUrl?: string;
+    email: string;
+    avatar_url?: string;
 }
 
 const ProfilePage = () => {
@@ -23,8 +23,18 @@ const ProfilePage = () => {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const apiClient = new ApiClient();
-                const response = await apiClient.users.getCurrentUser();
+                // TODO: Replace with actual user profile endpoint when available
+                const response = await new Promise<UserProfile>((resolve, reject) => {
+                    api.membersGet(1, 0, (error: Error | null, data: any) => {
+                        if (error) reject(error);
+                        else resolve({
+                            id: data.id?.userUuid || '',
+                            name: data.member_name || '',
+                            email: data.email || '',
+                            avatar_url: data.avatar_url
+                        });
+                    });
+                });
                 setProfile(response);
             } catch (err) {
                 setError(err instanceof Error ? err : new Error('Failed to fetch user profile'));
@@ -59,9 +69,9 @@ const ProfilePage = () => {
             </button>
 
             <div className="profile-content">
-                {profile.avatarUrl && (
+                {profile.avatar_url && (
                     <img
-                        src={profile.avatarUrl}
+                        src={profile.avatar_url}
                         alt={profile.name}
                         className="profile-avatar"
                     />

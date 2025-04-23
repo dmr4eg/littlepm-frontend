@@ -7,14 +7,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import ApiClient from '../api/ApiClient';
-
-interface ProjectBlueprint {
-    id: string;
-    title: string;
-    description: string;
-    imageUrl?: string;
-}
+import api from '../api/api';
+import ProjectBlueprint from '../api/models/ProjectBlueprint';
+import ProjectDTO from '../api/models/ProjectDTO';
 
 const ProjectCreatePage = () => {
     const router = useRouter();
@@ -25,8 +20,12 @@ const ProjectCreatePage = () => {
     useEffect(() => {
         const fetchBlueprints = async () => {
             try {
-                const apiClient = new ApiClient();
-                const response = await apiClient.projects.getProjectBlueprints();
+                const response = await new Promise<ProjectBlueprint[]>((resolve, reject) => {
+                    api.projectsGet(100, 0, (error: Error | null, data: ProjectBlueprint[]) => {
+                        if (error) reject(error);
+                        else resolve(data);
+                    });
+                });
                 setBlueprints(response);
             } catch (err) {
                 setError(err instanceof Error ? err : new Error('Failed to fetch project blueprints'));
@@ -40,13 +39,17 @@ const ProjectCreatePage = () => {
 
     const handleCreateProject = async (blueprintId: string) => {
         try {
-            const apiClient = new ApiClient();
-            const response = await apiClient.projects.createProject({
-                blueprintId,
-                title: `New Project from ${blueprints.find(b => b.id === blueprintId)?.title}`,
-                description: 'Created from template'
+            const response = await new Promise<ProjectDTO>((resolve, reject) => {
+                api.projectsPost({
+                    blueprint: blueprintId,
+                    title: `New Project from ${blueprints.find(b => b.project_blueprint_uuid === blueprintId)?.title}`,
+                    description: 'Created from template'
+                }, (error: Error | null, data: ProjectDTO) => {
+                    if (error) reject(error);
+                    else resolve(data);
+                });
             });
-            router.push(`/project/${response.id}`);
+            router.push(`/project/${response.instance.id.projectBlueprintUuid}`);
         } catch (err) {
             console.error('Failed to create project:', err);
         }
@@ -72,10 +75,10 @@ const ProjectCreatePage = () => {
 
             <div className="project-grid">
                 {blueprints.map(blueprint => (
-                    <div key={blueprint.id} className="project-card">
-                        {blueprint.imageUrl && (
+                    <div key={blueprint.project_blueprint_uuid} className="project-card">
+                        {blueprint.poster_url && (
                             <img
-                                src={blueprint.imageUrl}
+                                src={blueprint.poster_url}
                                 alt={blueprint.title}
                                 className="project-image"
                             />
@@ -83,7 +86,7 @@ const ProjectCreatePage = () => {
                         <h3>{blueprint.title}</h3>
                         <p>{blueprint.description}</p>
                         <button
-                            onClick={() => handleCreateProject(blueprint.id)}
+                            onClick={() => handleCreateProject(blueprint.project_blueprint_uuid)}
                             className="create-button"
                         >
                             Create Project

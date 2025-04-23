@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import ApiClient from '../api/ApiClient';
+import api from '../api/api';
+import DayInstance from '../api/models/DayInstance';
 
 interface Task {
     id: string;
@@ -24,8 +25,12 @@ export const DayChecklist: React.FC<DayChecklistProps> = ({ dayId, tasks }) => {
 
         try {
             setIsSubmitting(true);
-            const apiClient = new ApiClient();
-            await apiClient.days.updateDayTasks(dayId, updatedTasks);
+            await new Promise<DayInstance>((resolve, reject) => {
+                api.dayInstancesDayBlueprintUuidUserUuidPut(dayId, 'current', updatedTasks, (error: Error | null, data: DayInstance) => {
+                    if (error) reject(error);
+                    else resolve(data);
+                });
+            });
         } catch (error) {
             console.error('Failed to update tasks:', error);
             // Revert the change if the update fails

@@ -7,7 +7,8 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import ApiClient from '../api/ApiClient';
+import api from '../api/api';
+import Members from '../api/models/Members';
 
 const RegistrationPage = () => {
     const router = useRouter();
@@ -21,11 +22,17 @@ const RegistrationPage = () => {
         setError(null);
 
         try {
-            const apiClient = new ApiClient();
-            await apiClient.users.register({
-                email,
-                password,
-                name
+            await new Promise<Members>((resolve, reject) => {
+                api.membersPost({
+                    id: {
+                        userUuid: email, // Using email as userUuid for now
+                        projectBlueprintUuid: 'default'
+                    },
+                    member_name: name
+                }, (error: Error | null, data: Members) => {
+                    if (error) reject(error);
+                    else resolve(data);
+                });
             });
             router.push('/');
         } catch (err) {

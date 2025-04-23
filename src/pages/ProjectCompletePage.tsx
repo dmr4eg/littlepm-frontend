@@ -27,7 +27,7 @@ const ProjectCompletePage = () => {
 
             try {
                 const apiClient = new ApiClient();
-                const response = await apiClient.projects.getProjectById(projectId as string);
+                const response = await apiClient.getProjectDetails(projectId as string);
                 setProject(response);
             } catch (err) {
                 setError(err instanceof Error ? err : new Error('Failed to fetch project details'));

@@ -1,25 +1,20 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
-import ApiClient from '../api/ApiClient';
+import { useAuth } from '../contexts/AuthContext';
 
 const RootPage = () => {
     const router = useRouter();
+    const { isAuthenticated, isLoading, login } = useAuth();
 
-    useEffect(() => {
-        const checkAuth = async () => {
-            try {
-                const apiClient = new ApiClient();
-                await apiClient.users.getCurrentUser();
-                // If we get here, the user is authenticated
+    React.useEffect(() => {
+        if (!isLoading) {
+            if (isAuthenticated) {
                 router.push('/dashboard');
-            } catch (error) {
-                // If we get an error, the user is not authenticated
-                router.push('/login');
+            } else {
+                login();
             }
-        };
-
-        checkAuth();
-    }, [router]);
+        }
+    }, [isLoading, isAuthenticated, router, login]);
 
     return (
         <div className="root-page">

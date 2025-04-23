@@ -7,20 +7,14 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import ApiClient from '../api/ApiClient';
-
-interface ProjectDetails {
-    id: string;
-    title: string;
-    description: string;
-    status: 'NEW' | 'IN_PROGRESS' | 'COMPLETED';
-    currentDayOrder?: number;
-}
+import api from '../api/api';
+import ProjectDTO from '../api/models/ProjectDTO';
+import ProjectInstance from '../api/models/ProjectInstance';
 
 const ProjectPage = () => {
     const router = useRouter();
     const { projectId } = router.query;
-    const [project, setProject] = useState<ProjectDetails | null>(null);
+    const [project, setProject] = useState<ProjectDTO | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
 
@@ -29,13 +23,17 @@ const ProjectPage = () => {
             if (!projectId) return;
 
             try {
-                const apiClient = new ApiClient();
-                const response = await apiClient.projects.getProjectById(projectId as string);
+                const response = await new Promise<ProjectDTO>((resolve, reject) => {
+                    api.projectsProjectBlueprintUuidGet(projectId as string, (error: Error | null, data: ProjectDTO) => {
+                        if (error) reject(error);
+                        else resolve(data);
+                    });
+                });
                 setProject(response);
 
                 // If project is in progress, redirect to the current day
-                if (response.status === 'IN_PROGRESS' && response.currentDayOrder) {
-                    router.push(`/project/${projectId}/day/${response.currentDayOrder}`);
+                if (response.instance.status === ProjectInstance.StatusEnum.IN_PROGRESS) {
+                    router.push(`/project/${projectId}/day/1`);
                 }
             } catch (err) {
                 setError(err instanceof Error ? err : new Error('Failed to fetch project details'));
@@ -65,10 +63,10 @@ const ProjectPage = () => {
 
     return (
         <div className="project-page">
-            <h1>{project.title}</h1>
-            <p>{project.description}</p>
+            <h1>{project.blueprint.title}</h1>
+            <p>{project.blueprint.description}</p>
 
-            {project.status === 'NEW' && (
+            {project.instance.status === ProjectInstance.StatusEnum.IN_PROGRESS && (
                 <div className="project-intro">
                     <h2>Welcome to your new project!</h2>
                     <p>Click the button below to start your journey.</p>
