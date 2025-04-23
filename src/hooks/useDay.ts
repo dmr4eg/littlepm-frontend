@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ApiClient } from '../api/ApiClient';
+import ApiClient from '../api/ApiClient';
 import DayDTO from '../api/models/DayDTO';
 
 export const useDay = (dayId: string) => {
@@ -12,7 +12,7 @@ export const useDay = (dayId: string) => {
             try {
                 const apiClient = new ApiClient();
                 const response = await apiClient.days.getDayById(dayId);
-                setData(response.data);
+                setData(response as DayDTO);
             } catch (err) {
                 setError(err instanceof Error ? err : new Error('Failed to fetch day'));
             } finally {

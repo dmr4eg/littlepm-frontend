@@ -4,21 +4,20 @@
 // 2. button next redirects to daytransit route
 
 import React from 'react';
-import { useParams } from 'react-router-dom';
-import { DayDTO } from '../api/models/DayDTO';
-import { DayBlueprint } from '../api/models/DayBlueprint';
-import { DayInstance } from '../api/models/DayInstance';
+import { useRouter } from 'next/router';
+import DayDTO from '../api/models/DayDTO';
+import DayBlueprint from '../api/models/DayBlueprint';
+import DayInstance from '../api/models/DayInstance';
 import { useDay } from '../hooks/useDay';
 import { DayContent } from '../components/DayContent';
 import { DayChecklist } from '../components/DayChecklist';
 import { DayCompletion } from '../components/DayCompletion';
 
-interface DayPageProps {
-    dayId: string;
-}
+const DayPage = () => {
+    const router = useRouter();
+    const { dayId } = router.query;
 
-export const DayPage: React.FC<DayPageProps> = ({ dayId }) => {
-    const { data: day, isLoading, error } = useDay(dayId);
+    const { data: day, isLoading, error } = useDay(dayId as string);
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -43,17 +42,19 @@ export const DayPage: React.FC<DayPageProps> = ({ dayId }) => {
 
             {instance.status === 'IN_PROGRESS' && (
                 <DayChecklist
-                    dayId={dayId}
+                    dayId={dayId as string}
                     tasks={blueprint.tasks || []}
                 />
             )}
 
             {instance.status === 'COMPLETED' && (
                 <DayCompletion
-                    dayId={dayId}
+                    dayId={dayId as string}
                     completionData={instance.completionData}
                 />
             )}
         </div>
     );
 };
+
+export default DayPage;

@@ -23,9 +23,9 @@ import LoginPage from './pages/LoginPage';
 import LogoutPage from './pages/LogoutPage';
 import ProfilePage from './pages/ProfilePage';
 import ProjectCompletePage from './pages/ProjectCompletePage';
-import CreateProjectPage from './pages/CreateProjectPage';
+import CreateProjectPage from './pages/ProjectCreatePage';
 import ProjectPage from './pages/ProjectPage';
-import RegPage from './pages/RegPage';
+import RegPage from './pages/RegistrationPage';
 
 const App: React.FC = () => (
   <BrowserRouter>

@@ -1,7 +1,7 @@
 // import { StrictMode } from 'react'
 
 import './styles/index.css'
-import App from './App.tsx'
+import App from './App'
 // import {ReactKeycloakProvider} from "@react-keycloak/web";
 // import {initOptions, keycloak} from "./config/keycloakConfig.ts";
 // import loadingPage from "./pages/LoadingPage.tsx";

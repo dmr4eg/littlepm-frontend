@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ApiClient } from '../api/ApiClient';
+import ApiClient from '../api/ApiClient';
 
 interface Task {
     id: string;
