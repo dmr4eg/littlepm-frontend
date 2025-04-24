@@ -19,6 +19,10 @@ const DayPage = () => {
 
     const { data: day, isLoading, error } = useDay(dayId as string);
 
+
+    // TODO add content states for fields, tasks, media, forms ans text
+    //  TODO useEffect for callback all content of the day
+
     if (isLoading) {
         return <div>Loading...</div>;
     }
@@ -37,7 +41,7 @@ const DayPage = () => {
         <div className="day-page">
             <h1>{blueprint.title}</h1>
             {blueprint.description && <p>{blueprint.description}</p>}
-
+            {/* TODO if there is component in state -> render them using ui components*/}
             <DayContent content={blueprint.text} />
 
             {instance.status === 'IN_PROGRESS' && (
