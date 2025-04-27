@@ -1,10 +1,38 @@
-import CourseApi from '../api-course/controllers/CourseApi';
-import ApiClient from '../api-course/ApiClient';
+import {
+    Configuration,           // replaces ApiClient
+    DaysApi,
+    FinancesApi,
+    MembersApi,
+    ProjectsApi
+} from '@/api-course'; // generated from openapi spec
 
-// relative path from here to your config.json
 import config from '../configs/api-course.json';
 
-// TODO use configs json
-const apiCourse = new CourseApi(new ApiClient(config.api.API_BASE_URL));
+const apiCfg = new Configuration({
+    basePath: config.api.API_BASE_URL,  
+    // accessToken: () => localStorage.getItem('jwt') ?? '',
+    // or to override fetch (node, SSR):
+    // fetchApi : fetchPolyfill,
+});
 
-export default apiCourse;
+export const daysApi  = new DaysApi(apiCfg);
+export const financesApi  = new FinancesApi(apiCfg);
+export const membersApi  = new MembersApi(apiCfg);
+export const projectsApi  = new ProjectsApi(apiCfg);
+
+
+export default {
+    daysApi,
+    financesApi,
+    membersApi,
+    projectsApi
+}
+
+
+// export const apiContent = {
+//   tasks : tasksApi,
+//   forms : formsApi,
+//   media : mediaApi,
+// };
+
+// export default apiContent;
