@@ -5,7 +5,7 @@ import {
     MediaApi,
 } from '@/api-content'; // generated from openapi spec
 
-import config from '../configs/api-content.json';
+import config from '../../configs/api-content.json';
 
 const apiCfg = new Configuration({
     basePath: config.api.API_BASE_URL,  

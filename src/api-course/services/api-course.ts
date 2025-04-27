@@ -6,7 +6,7 @@ import {
     ProjectsApi
 } from '@/api-course'; // generated from openapi spec
 
-import config from '../configs/api-course.json';
+import config from '../../configs/api-course.json';
 
 const apiCfg = new Configuration({
     basePath: config.api.API_BASE_URL,  

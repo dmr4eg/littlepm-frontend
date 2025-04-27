@@ -5,92 +5,81 @@
 // 3. send post request to create project instance
 // 4. redirect to project route with blueprint uuid
 
-import React, { useState, useEffect } from 'react';
+// 1) react & routing
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import DefaultApi from '../api/controllers/DefaultApi';
-import ProjectBlueprint from '../api/models/ProjectBlueprint';
-import ProjectDTO from '../api/models/ProjectDTO';
 
-const ProjectCreatePage = () => {
+import { projectsApi } from '@/api-course/services/api-course'
+import type {
+    ProjectBlueprint,
+    ProjectDTO,
+    ProjectInstance
+} from '@/api-course';                                  // generated models
+
+const ProjectCreatePage: React.FC = () => {
     const router = useRouter();
     const [blueprints, setBlueprints] = useState<ProjectBlueprint[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<Error | null>(null);
+    const [isLoading,  setIsLoading ] = useState(true);
+    const [error,      setError     ] = useState<Error | null>(null);
 
     useEffect(() => {
-        const fetchBlueprints = async () => {
+        const loadBlueprints = async () => {
             try {
-                const api = new DefaultApi();
-                const response = await new Promise<ProjectBlueprint[]>((resolve, reject) => {
-                    api.projectsGet(100, 0, (error: Error | null, data: ProjectBlueprint[]) => {
-                        if (error) reject(error);
-                        else resolve(data);
-                    });
-                });
-                setBlueprints(response);
-            } catch (err) {
-                setError(err instanceof Error ? err : new Error('Failed to fetch project blueprints'));
+                const data = await projectsApi.projectsGet({ limit: 100, offset: 0 });
+                setBlueprints(data);
+            } catch (e) {
+                setError(e instanceof Error ? e : new Error('Unable to load projects'));
             } finally {
                 setIsLoading(false);
             }
         };
 
-        fetchBlueprints();
+        loadBlueprints();
     }, []);
 
-    const handleCreateProject = async (blueprintId: string) => {
+    const handleCreate = async (blueprintId: string) => {
         try {
-            const api = new DefaultApi();
-            const response = await new Promise<ProjectDTO>((resolve, reject) => {
-                api.projectsPost({
-                    blueprint: blueprintId,
-                    title: `New Project from ${blueprints.find(b => b.project_blueprint_uuid === blueprintId)?.title}`,
-                    description: 'Created from template'
-                }, (error: Error | null, data: ProjectDTO) => {
-                    if (error) reject(error);
-                    else resolve(data);
-                });
+            const body: ProjectInstance = {
+                id: { projectBlueprintUuid: blueprintId, userUuid: '' },
+                status: 'IN_PROGRESS',
+            };
+
+            const dto: ProjectDTO = await projectsApi.projectInstancesPost({
+                projectInstance: body,
             });
-            router.push(`/project/${response.instance.id.projectBlueprintUuid}`);
-        } catch (err) {
-            console.error('Failed to create project:', err);
+
+            router.push(
+                `/project/${dto.instance.id.projectBlueprintUuid}`,
+            );
+        } catch (e) {
+            console.error('Project creation failed:', e);
         }
     };
 
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
-    if (error) {
-        return <div>Error: {error.message}</div>;
-    }
+    if (isLoading) return <div>Loading…</div>;
+    if (error)     return <div>Error: {error.message}</div>;
 
     return (
         <div className="project-create-page">
             <h1>Create New Project</h1>
-            <button
-                onClick={() => router.push('/dashboard')}
-                className="back-button"
-            >
+
+            <button onClick={() => router.push('/dashboard')} className="back-button">
                 Back to Dashboard
             </button>
 
             <div className="project-grid">
-                {blueprints.map(blueprint => (
-                    <div key={blueprint.project_blueprint_uuid} className="project-card">
-                        {blueprint.poster_url && (
-                            <img
-                                src={blueprint.poster_url}
-                                alt={blueprint.title}
-                                className="project-image"
-                            />
+                {blueprints.map(bp => (
+                    <div key={bp.projectBlueprintUuid} className="project-card">
+                        {bp.posterUrl && (
+                            <img src={bp.posterUrl} alt={bp.title} className="project-image" />
                         )}
-                        <h3>{blueprint.title}</h3>
-                        <p>{blueprint.description}</p>
+
+                        <h3>{bp.title}</h3>
+                        <p>{bp.description}</p>
+
                         <button
-                            onClick={() => handleCreateProject(blueprint.project_blueprint_uuid)}
                             className="create-button"
-                        >
+                            onClick={() => handleCreate(bp.projectBlueprintUuid)}>
                             Create Project
                         </button>
                     </div>
