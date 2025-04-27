@@ -1,0 +1,6 @@
+{
+    "api": {
+        "API_BASE_URL": "https://api.example.com",
+        "timeout": 5000
+    }
+}
