@@ -4,86 +4,67 @@
 // passwordfiled
 // keycloak callback and redirect = /
 
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import DefaultApi from '../api/controllers/DefaultApi';
-import Members from '../api/models/Members';
+import keycloak from '@/configs/keycloak';
+import { useAuth } from '@/contexts/AuthContext';
 
-const RegistrationPage = () => {
+const RegistrationPage: React.FC = () => {
     const router = useRouter();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [name, setName] = useState('');
-    const [error, setError] = useState<string | null>(null);
+    const { isAuthenticated, isLoading } = useAuth();
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setError(null);
-
-        try {
-            const api = new DefaultApi();
-            await new Promise<Members>((resolve, reject) => {
-                api.membersPost({
-                    id: {
-                        userUuid: email, // Using email as userUuid for now
-                        projectBlueprintUuid: 'default'
-                    },
-                    member_name: name
-                }, (error: Error | null, data: Members) => {
-                    if (error) reject(error);
-                    else resolve(data);
-                });
-            });
-            router.push('/');
-        } catch (err) {
-            setError(err instanceof Error ? err.message : 'Registration failed');
+    useEffect(() => {
+        if (isAuthenticated && !isLoading) {
+            router.push('/dashboard');
         }
+    }, [isAuthenticated, isLoading, router]);
+
+    const handleRegister = () => {
+        keycloak.register();
     };
 
+    if (isLoading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            </div>
+        );
+    }
+
     return (
-        <div className="registration-page">
-            <h1>Register</h1>
-            {error && <div className="error-message">{error}</div>}
+        <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-md w-full space-y-8">
+                <div>
+                    <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                        Create Your Account
+                    </h2>
+                    <p className="mt-2 text-center text-sm text-gray-600">
+                        Join us to start your journey
+                    </p>
+                </div>
 
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label htmlFor="name">Name</label>
-                    <input
-                        type="text"
-                        id="name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="email">Email</label>
-                    <input
-                        type="email"
-                        id="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="password">Password</label>
-                    <input
-                        type="password"
-                        id="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                </div>
-                <button type="submit">Register</button>
-            </form>
+                <div className="mt-8 space-y-6">
+                    <button
+                        onClick={handleRegister}
+                        className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    >
+                        Register with Keycloak
+                    </button>
 
-            <p>
-                Already have an account?{' '}
-                <Link href="/login">Login here</Link>
-            </p>
+                    <div className="text-center">
+                        <p className="text-sm text-gray-600">
+                            Already have an account?{' '}
+                            <Link
+                                href="/login"
+                                className="font-medium text-blue-600 hover:text-blue-500"
+                            >
+                                Sign in here
+                            </Link>
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };
