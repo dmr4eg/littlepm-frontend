@@ -1,61 +1,109 @@
-import React, { useState } from 'react';
-import api from '../api/api';
-import DayInstance from '../api/models/DayInstance';
-
-interface Task {
-    id: string;
-    title: string;
-    completed: boolean;
-}
+import React, { useState, useEffect } from 'react';
+import { daysApi } from '@/api-course/services/api-course';
+import { tasksApi } from '@/api-content/services/api-content';
+import type { DayComponentsMapper } from '@/api-course';
+import type { TaskDTO } from '@/api-content';
 
 interface DayChecklistProps {
     dayId: string;
-    tasks: Task[];
 }
 
-export const DayChecklist: React.FC<DayChecklistProps> = ({ dayId, tasks }) => {
-    const [taskList, setTaskList] = useState<Task[]>(tasks);
+export const DayChecklist: React.FC<DayChecklistProps> = ({ dayId }) => {
+    const [tasks, setTasks] = useState<TaskDTO[]>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<Error | null>(null);
+
+    useEffect(() => {
+        const fetchTasks = async () => {
+            try {
+                setIsLoading(true);
+                // First get all components for this day
+                const allComponents = await daysApi.dayComponentsMapperGet({
+                    limit: 100,
+                    offset: 0,
+                });
+
+                // Filter task components for this day
+                const taskComponents = allComponents.filter(
+                    comp => comp.id.dayBlueprintUuid === dayId && comp.type === 'TASK'
+                );
+
+                // Then fetch task details for each component
+                const taskPromises = taskComponents.map(async (component) => {
+                    const taskData = await tasksApi.taskInstancesTaskBlueprintUuidUserUuidGet({
+                        taskBlueprintUuid: component.id.componentUuid,
+                        userUuid: 'current'
+                    });
+                    return taskData;
+                });
+
+                const taskData = await Promise.all(taskPromises);
+                setTasks(taskData);
+            } catch (e) {
+                setError(e instanceof Error ? e : new Error('Failed to load tasks'));
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        if (dayId) {
+            fetchTasks();
+        }
+    }, [dayId]);
 
     const handleTaskToggle = async (taskId: string) => {
-        const updatedTasks = taskList.map(task =>
-            task.id === taskId ? { ...task, completed: !task.completed } : task
+        const updatedTasks = tasks.map(task =>
+            task.blueprint.taskBlueprintUuid === taskId
+                ? {
+                    ...task,
+                    progress: {
+                        ...task.progress,
+                        status: !task.progress.status
+                    }
+                }
+                : task
         );
-        setTaskList(updatedTasks);
+        setTasks(updatedTasks);
 
         try {
             setIsSubmitting(true);
-            await new Promise<DayInstance>((resolve, reject) => {
-                api.dayInstancesDayBlueprintUuidUserUuidPut(dayId, 'current', updatedTasks, (error: Error | null, data: DayInstance) => {
-                    if (error) reject(error);
-                    else resolve(data);
+            const taskToUpdate = updatedTasks.find(t => t.blueprint.taskBlueprintUuid === taskId);
+            if (taskToUpdate) {
+                await tasksApi.taskInstancesTaskBlueprintUuidUserUuidPut({
+                    taskBlueprintUuid: taskId,
+                    userUuid: 'current',
+                    taskInstance: taskToUpdate.progress
                 });
-            });
+            }
         } catch (error) {
-            console.error('Failed to update tasks:', error);
+            console.error('Failed to update task:', error);
             // Revert the change if the update fails
-            setTaskList(tasks);
+            setTasks(tasks);
         } finally {
             setIsSubmitting(false);
         }
     };
 
-    const allTasksCompleted = taskList.every(task => task.completed);
+    if (isLoading) return <div>Loading tasks...</div>;
+    if (error) return <div>Error loading tasks: {error.message}</div>;
+
+    const allTasksCompleted = tasks.every(task => task.progress.status);
 
     return (
         <div className="day-checklist">
             <h2>Tasks</h2>
             <ul>
-                {taskList.map(task => (
-                    <li key={task.id}>
+                {tasks.map(task => (
+                    <li key={task.blueprint.taskBlueprintUuid}>
                         <label>
                             <input
                                 type="checkbox"
-                                checked={task.completed}
-                                onChange={() => handleTaskToggle(task.id)}
+                                checked={task.progress.status}
+                                onChange={() => handleTaskToggle(task.blueprint.taskBlueprintUuid)}
                                 disabled={isSubmitting}
                             />
-                            {task.title}
+                            {task.blueprint.title}
                         </label>
                     </li>
                 ))}
