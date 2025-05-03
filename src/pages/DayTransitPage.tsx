@@ -1,12 +1,14 @@
-// url = /project/{projectblueprintuuid}/day/next/{dayorder}\
+// url = /project/{projectblueprintuuid}/day/next/{dayorder}
 // 1. congrats
 // if next dayorder is out of bound, then redirect to ProjectComplete route 
 // if no - button to redirect to next day route by its order
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import DefaultApi from '../api/controllers/DefaultApi';
-import ProjectDaysMapper from '../api/models/ProjectDaysMapper';
+import { projectsApi } from '@/api-course/services/api-course';
+import type { ProjectDaysMapper } from '@/api-course';
+import { useAuth } from '@/contexts/AuthContext';
+import keycloak from '@/configs/keycloak';
 
 interface DayTransition {
     currentDayOrder: number;
@@ -15,98 +17,100 @@ interface DayTransition {
     projectId: string;
 }
 
-const DayTransitPage = () => {
+const DayTransitPage: React.FC = () => {
     const router = useRouter();
-    const { projectId, dayOrder } = router.query;
+    const { projectblueprintuuid, dayorder } = router.query;
+    const { isAuthenticated, isLoading: authLoading } = useAuth();
     const [transition, setTransition] = useState<DayTransition | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
 
-    useEffect(() => {
-        const fetchTransitionInfo = async () => {
-            if (!projectId || !dayOrder) return;
+    const userUuid = keycloak.tokenParsed?.sub;
 
+    useEffect(() => {
+        if (!projectblueprintuuid || !dayorder || !userUuid || authLoading || !isAuthenticated) return;
+
+        const fetchTransitionInfo = async () => {
+            setIsLoading(true);
+            setError(null);
             try {
-                const api = new DefaultApi();
-                const response = await new Promise<ProjectDaysMapper[]>((resolve, reject) => {
-                    api.projectDaysMapperGet(100, 0, (error: Error | null, data: ProjectDaysMapper[]) => {
-                        if (error) reject(error);
-                        else resolve(data);
-                    });
+                const response = await projectsApi.projectDaysMapperGet({
+                    limit: 100,
+                    offset: 0,
                 });
 
-                // Filter mappers for this project and sort by sort order
                 const projectMappers = response
-                    .filter(mapper => mapper.id.project_blueprint_uuid === projectId)
+                    .filter(mapper => mapper.id.projectBlueprintUuid === projectblueprintuuid)
                     .sort((a, b) => a.sortOrder - b.sortOrder);
 
-                const currentDayIndex = projectMappers.findIndex(mapper => mapper.sortOrder === parseInt(dayOrder as string));
+                const currentDayIndex = projectMappers.findIndex(
+                    mapper => mapper.sortOrder === parseInt(dayorder as string)
+                );
                 const nextDayIndex = currentDayIndex + 1;
 
                 setTransition({
-                    currentDayOrder: parseInt(dayOrder as string),
+                    currentDayOrder: parseInt(dayorder as string),
                     nextDayOrder: nextDayIndex < projectMappers.length ? projectMappers[nextDayIndex].sortOrder : undefined,
                     totalDays: projectMappers.length,
-                    projectId: projectId as string
+                    projectId: projectblueprintuuid as string
                 });
 
-                // If there's no next day, redirect to project completion
                 if (nextDayIndex >= projectMappers.length) {
-                    router.push(`/project/${projectId}/complete`);
+                    router.push(`/project/${projectblueprintuuid}/complete`);
                 }
-            } catch (err) {
-                setError(err instanceof Error ? err : new Error('Failed to fetch transition info'));
+            } catch (e) {
+                setError(e instanceof Error ? e : new Error('Failed to fetch transition info'));
             } finally {
                 setIsLoading(false);
             }
         };
 
         fetchTransitionInfo();
-    }, [projectId, dayOrder, router]);
+    }, [projectblueprintuuid, dayorder, userUuid, authLoading, isAuthenticated, router]);
 
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
-    if (error) {
-        return <div>Error: {error.message}</div>;
-    }
-
-    if (!transition) {
-        return <div>Transition info not found</div>;
-    }
+    if (authLoading || isLoading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error.message}</div>;
+    if (!transition) return <div>Transition info not found</div>;
 
     const handleNextDay = () => {
         if (transition.nextDayOrder) {
-            router.push(`/project/${projectId}/day/${transition.nextDayOrder}`);
+            router.push(`/project/${projectblueprintuuid}/day/${transition.nextDayOrder}`);
         }
     };
 
     return (
-        <div className="day-transit-page">
-            <h1>Great job!</h1>
-            <div className="transition-message">
-                <h2>You've completed Day {transition.currentDayOrder}</h2>
-                <p>You're making great progress!</p>
-                {transition.nextDayOrder && (
-                    <p>Ready for Day {transition.nextDayOrder}?</p>
+        <div className="day-transit-page p-6">
+            <div className="max-w-2xl mx-auto text-center">
+                <h1 className="text-3xl font-bold mb-6">Great job!</h1>
+                <div className="transition-message space-y-4 mb-8">
+                    <h2 className="text-2xl font-semibold">
+                        You've completed Day {transition.currentDayOrder}
+                    </h2>
+                    <p className="text-lg text-gray-600">
+                        You're making great progress!
+                    </p>
+                    {transition.nextDayOrder && (
+                        <p className="text-lg text-gray-600">
+                            Ready for Day {transition.nextDayOrder}?
+                        </p>
+                    )}
+                </div>
+                {transition.nextDayOrder ? (
+                    <button
+                        onClick={handleNextDay}
+                        className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+                    >
+                        Continue to Next Day
+                    </button>
+                ) : (
+                    <button
+                        onClick={() => router.push(`/project/${projectblueprintuuid}/complete`)}
+                        className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors"
+                    >
+                        Complete Project
+                    </button>
                 )}
             </div>
-            {transition.nextDayOrder ? (
-                <button
-                    onClick={handleNextDay}
-                    className="next-day-button"
-                >
-                    Continue to Next Day
-                </button>
-            ) : (
-                <button
-                    onClick={() => router.push(`/project/${projectId}/complete`)}
-                    className="complete-project-button"
-                >
-                    Complete Project
-                </button>
-            )}
         </div>
     );
 };

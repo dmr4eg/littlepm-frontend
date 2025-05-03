@@ -97,29 +97,20 @@ const DayPage: React.FC = () => {
             setIsLoading(true);
             setError(null);
             try {
-                // Fetch main day data
                 const dayData = await daysApi.dayInstancesDayBlueprintUuidUserUuidGet({
                     dayBlueprintUuid: dayBlueprintUuid as string,
                     userUuid: userUuid as string,
                 });
                 setDay(dayData);
-
-                // Set text content
                 setText(dayData.blueprint.text);
-
-                // Fetch all components for this day
                 const allComponents = await daysApi.dayComponentsMapperGet({
                     limit: 100,
                     offset: 0,
                 });
-
-                // Filter components for this day and sort by order
                 const dayComponents = allComponents
                     .filter(comp => comp.id.dayBlueprintUuid === dayBlueprintUuid)
                     .sort((a, b) => a.sortOrder - b.sortOrder);
                 setComponents(dayComponents);
-
-                // Fetch detailed data for each component type
                 const taskPromises = dayComponents
                     .filter(c => c.type === 'TASK')
                     .map(async (component) => {
@@ -129,7 +120,6 @@ const DayPage: React.FC = () => {
                         });
                         return taskData;
                     });
-
                 const formPromises = dayComponents
                     .filter(c => c.type === 'FORM')
                     .map(async (component) => {
@@ -181,10 +171,8 @@ const DayPage: React.FC = () => {
                 {blueprint.description && <p className="text-gray-600">{blueprint.description}</p>}
             </div>
 
-            {/* Render text content */}
             {text && <DayContent content={text} />}
 
-            {/* Render components in their defined order */}
             {components.map(component => {
                 switch (component.type) {
                     case 'TASK':
@@ -201,27 +189,21 @@ const DayPage: React.FC = () => {
                 }
             })}
 
-            {/* Render checklist if in progress */}
             {instance.status === 'IN_PROGRESS' && (
                 <DayChecklist
                     dayId={instance.id.dayBlueprintUuid}
                 />
             )}
 
-            {/* Render completion if completed */}
             {instance.status === 'COMPLETED' && (
                 <DayCompletion
                     dayId={instance.id.dayBlueprintUuid}
                 />
             )}
-
-            {/* Example: Button to go to next day */}
             <div className="mt-8 flex justify-end">
                 <button
                     className="bg-blue-600 text-white px-4 py-2 rounded"
                     onClick={() => {
-                        // Use the project blueprint uuid from the route
-                        // You need to determine the next day UUID/order if you want to navigate to the next day
                         router.push(`/project/${router.query.projectblueprintuuid}/day/`); // Add next day UUID/order if available
                     }}
                 >
