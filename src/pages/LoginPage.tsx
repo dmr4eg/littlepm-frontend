@@ -39,7 +39,6 @@ const LoginPage: React.FC = () => {
 
     return (
         <div className="min-h-screen flex flex-col justify-between bg-yellow-100 relative">
-            {/* Header */}
             <header className="w-full flex justify-between items-center px-8 py-4 bg-yellow-300 rounded-b-3xl shadow-md">
                 <div className="text-xl font-handwriting font-bold text-black">Little Project Manager</div>
                 <div className="space-x-4">
@@ -57,8 +56,6 @@ const LoginPage: React.FC = () => {
                     </button>
                 </div>
             </header>
-
-            {/* Blurred background image */}
             <div className="absolute inset-0 z-0">
                 <img
                     src="/assets/login-bg-blur.jpg"
@@ -66,11 +63,8 @@ const LoginPage: React.FC = () => {
                     className="w-full h-full object-cover blur-md opacity-60 rounded-3xl"
                 />
             </div>
-
-            {/* Centered Modal */}
             <main className="flex-grow flex items-center justify-center z-10 relative">
                 <div className="bg-[#F8E9D2] rounded-2xl shadow-2xl px-10 py-8 w-full max-w-md flex flex-col items-center relative border border-yellow-200">
-                    {/* Close button */}
                     <button
                         className="absolute top-4 right-4 text-2xl text-gray-500 hover:text-black focus:outline-none"
                         onClick={handleClose}
@@ -120,8 +114,6 @@ const LoginPage: React.FC = () => {
                     </form>
                 </div>
             </main>
-
-            {/* Footer */}
             <footer className="w-full bg-yellow-300 rounded-t-3xl px-8 py-4 flex flex-col md:flex-row justify-between items-center text-sm text-black z-10 relative">
                 <div className="flex items-center space-x-4 mb-2 md:mb-0">
                     <span>Email: info@little.pm</span>

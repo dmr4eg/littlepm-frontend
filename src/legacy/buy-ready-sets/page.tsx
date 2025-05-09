@@ -1,11 +1,11 @@
 'use client';
 
-import {Button} from '@/components/ui/button';
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
-import {useRouter} from 'next/navigation';
-import {ChevronLeft, Play} from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { ChevronLeft, Play } from 'lucide-react';
 import Link from 'next/link';
 
 const BuyReadySetsPage = () => {
@@ -30,9 +30,9 @@ const BuyReadySetsPage = () => {
             {/* Timeline */}
             <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-border z-0" />
             {/* Stars */}
-            {Array.from({length: 7}).map((_, index) => {
+            {Array.from({ length: 7 }).map((_, index) => {
               const day = index + 1;
-              const isActive = day === 1; // Day 1 is active
+              const isActive = day === 1;
               return (
                 <div key={index} className="relative z-10">
                   {isActive ? (

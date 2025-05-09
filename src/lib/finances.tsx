@@ -27,9 +27,9 @@ export function computeFinances(raw: FinancesPrimitives): Finances {
     const toysSold = Math.max(+((raw.toysSold ?? 0)), 0);
     const soldPriceIn = raw.soldPrice == null ? undefined : +raw.soldPrice;
 
-    const calculatedBudget = spentBudget + expenseAmount;                        // total cost
-    const investorReturn = calculatedBudget * RETURN;                     // absolute interest
-    const itemsCost = calculatedBudget / toysPlanned;                     // unit cost
+    const calculatedBudget = spentBudget + expenseAmount; // total cost
+    const investorReturn = calculatedBudget * RETURN;        // absolute interest
+    const itemsCost = calculatedBudget / toysPlanned;   // unit cost
     const pricePerItem =
         (calculatedBudget + investorReturn + calculatedBudget * MARGIN) /
         toysPlanned;

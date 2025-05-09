@@ -1,16 +1,16 @@
 'use client';
 
-import {Button} from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
-import {useRouter} from 'next/navigation';
-import {ChevronLeft} from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
-import React, {useState, useRef} from 'react';
-import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle} from "@/components/ui/dialog"
+import React, { useState, useRef } from 'react';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
-import {Input} from "@/components/ui/input";
+import { Input } from "@/components/ui/input";
 import Image from 'next/image';
 
 const DayThreePage = () => {
@@ -36,13 +36,13 @@ const DayThreePage = () => {
 
     try {
       const canvas = await html2canvas(reportRef.current, {
-          scale: 2, // Increase resolution
+        scale: 2,
       });
 
       const imgData = canvas.toDataURL('image/png');
       const link = document.createElement('a');
       link.href = imgData;
-      link.download = 'pitch_deck.png'; // Set the filename
+      link.download = 'pitch_deck.png';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -51,7 +51,6 @@ const DayThreePage = () => {
       router.push('/day-3-completion');
     } catch (error) {
       console.error("Error generating or downloading PNG:", error);
-      // Optionally, display an error message to the user.
     }
   };
 
@@ -75,9 +74,9 @@ const DayThreePage = () => {
             {/* Timeline */}
             <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-border z-0" />
             {/* Stars */}
-            {Array.from({length: 7}).map((_, index) => {
+            {Array.from({ length: 7 }).map((_, index) => {
               const day = index + 1;
-              const isActive = day === 3; // Day 3 is active
+              const isActive = day === 3;
               const isCompleted = day < 3;
               return (
                 <div key={index} className="relative z-10">
@@ -146,7 +145,7 @@ const DayThreePage = () => {
               <video
                 controls
                 className="w-full rounded-md"
-                style={{height: '200px'}}>
+                style={{ height: '200px' }}>
                 <source
                   src="https://www.w3schools.com/html/mov_bbb.mp4"
                   type="video/mp4"
@@ -248,10 +247,10 @@ const DayThreePage = () => {
             </Button>
           </div>
           <div className="absolute top-4 right-4">
-             <Button variant="ghost" size="icon" onClick={() => setOpen(false)}>
-                Close
-              </Button>
-            </div>
+            <Button variant="ghost" size="icon" onClick={() => setOpen(false)}>
+              Close
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
     </div>

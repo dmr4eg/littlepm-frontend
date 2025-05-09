@@ -18,18 +18,13 @@ export const DayChecklist: React.FC<DayChecklistProps> = ({ dayId }) => {
         const fetchTasks = async () => {
             try {
                 setIsLoading(true);
-                // First get all components for this day
                 const allComponents = await daysApi.dayComponentsMapperGet({
                     limit: 100,
                     offset: 0,
                 });
-
-                // Filter task components for this day
                 const taskComponents = allComponents.filter(
                     comp => comp.id.dayBlueprintUuid === dayId && comp.type === 'TASK'
                 );
-
-                // Then fetch task details for each component
                 const taskPromises = taskComponents.map(async (component) => {
                     const taskData = await tasksApi.taskInstancesTaskBlueprintUuidUserUuidGet({
                         taskBlueprintUuid: component.id.componentUuid,

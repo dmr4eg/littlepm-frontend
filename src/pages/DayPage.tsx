@@ -17,7 +17,6 @@ import keycloak from '@/configs/keycloak';
 import type { Finances } from '@/api-course/models/Finances';
 import { computeFinances, validateFinances, FinancesPrimitives } from '@/lib/finances';
 
-// Component interfaces
 interface TaskComponentProps {
     task: TaskDTO;
 }
@@ -30,7 +29,6 @@ interface MediaComponentProps {
     media: Media;
 }
 
-// Component implementations
 const TaskComponent: React.FC<TaskComponentProps> = ({ task }) => {
     return (
         <div className="task-component">
@@ -48,7 +46,6 @@ const FormComponent: React.FC<FormComponentProps> = ({ form }) => {
         <div className="form-component">
             <h3>{form.blueprint.title}</h3>
             {form.blueprint.description && <p>{form.blueprint.description}</p>}
-            {/* Form fields will be rendered here */}
         </div>
     );
 };
@@ -71,7 +68,6 @@ const MediaComponent: React.FC<MediaComponentProps> = ({ media }) => {
 
 const DayPage: React.FC = () => {
     const router = useRouter();
-    // These should match your dynamic route: /project/[projectId]/day/[dayBlueprintUuid]
     const { dayBlueprintUuid } = router.query;
 
     const { isAuthenticated, isLoading: authLoading } = useAuth();
@@ -79,17 +75,13 @@ const DayPage: React.FC = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
 
-    // Content states
     const [components, setComponents] = useState<DayComponentsMapper[]>([]);
     const [tasks, setTasks] = useState<TaskDTO[]>([]);
     const [forms, setForms] = useState<FormDTO[]>([]);
     const [media, setMedia] = useState<Media[]>([]);
     const [text, setText] = useState<string | undefined>(undefined);
-
-    // Get userUuid from Keycloak token
     const userUuid = keycloak.tokenParsed?.sub;
 
-    // Use FinancesPrimitives for user input
     const [financesInput, setFinancesInput] = useState<FinancesPrimitives>({
         spentBudget: 0,
         expenseAmount: 0,
@@ -98,8 +90,6 @@ const DayPage: React.FC = () => {
         toysSold: 0,
     });
     const [helpersPercents, setHelpersPercents] = useState<number[]>([]);
-
-    // Compute derived finances and validate
     let finances: Finances;
     let errors: string[] = [];
     let warnings: string[] = [];
@@ -247,7 +237,7 @@ const DayPage: React.FC = () => {
                 <button
                     className="bg-blue-600 text-white px-4 py-2 rounded"
                     onClick={() => {
-                        router.push(`/project/${router.query.projectblueprintuuid}/day/`); // Add next day UUID/order if available
+                        router.push(`/project/${router.query.projectblueprintuuid}/day/`);
                     }}
                 >
                     Next Day
@@ -293,7 +283,6 @@ const DayPage: React.FC = () => {
                         className="border rounded px-2 py-1"
                     />
                 </div>
-                {/* Helpers percents input (example for 2 helpers) */}
                 <div className="mt-4">
                     <label className="block font-medium">Helpers' % (comma separated):</label>
                     <input
@@ -309,7 +298,6 @@ const DayPage: React.FC = () => {
                         className="border rounded px-2 py-1 w-full"
                     />
                 </div>
-                {/* Show validation messages */}
                 {errors.length > 0 && (
                     <div className="bg-red-100 text-red-700 p-2 rounded mb-2 mt-4">
                         {errors.map((err, i) => <div key={i}>{err}</div>)}
@@ -320,7 +308,6 @@ const DayPage: React.FC = () => {
                         {warnings.map((warn, i) => <div key={i}>{warn}</div>)}
                     </div>
                 )}
-                {/* Show calculated results */}
                 <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-2">
                     <div>Calculated Budget: <b>{finances.calculatedBudget}</b></div>
                     <div>Investor Return: <b>{finances.investorReturn}</b></div>

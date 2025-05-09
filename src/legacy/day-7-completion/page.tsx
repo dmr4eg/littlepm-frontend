@@ -1,69 +1,61 @@
 'use client';
 
-import {Button} from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import {useRouter} from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 import Image from 'next/image';
-import {Textarea} from "@/components/ui/textarea";
+import { Textarea } from "@/components/ui/textarea";
 
 const DaySevenCompletionPage = () => {
   const router = useRouter();
 
   const handleComplete = () => {
-        // Retrieve the sales report data from localStorage
-        const soldPrices = localStorage.getItem('soldPrices');
-        const checkboxStates = localStorage.getItem('checkboxStates');
-        const investorAmount = localStorage.getItem('investorAmount');
+    const soldPrices = localStorage.getItem('soldPrices');
+    const checkboxStates = localStorage.getItem('checkboxStates');
+    const investorAmount = localStorage.getItem('investorAmount');
 
-        if (!soldPrices || !checkboxStates || !investorAmount) {
-          // Handle missing data appropriately, e.g., redirect to an error page
-          alert('Missing sales data. Please complete the sales process.');
-          router.push('/day-7');
-          return;
+    if (!soldPrices || !checkboxStates || !investorAmount) {
+      alert('Missing sales data. Please complete the sales process.');
+      router.push('/day-7');
+      return;
+    }
+
+    try {
+      const soldPricesData = JSON.parse(soldPrices);
+      const checkboxStatesData = JSON.parse(checkboxStates);
+      const investorAmountData = parseFloat(investorAmount);
+      let totalSold = 0;
+      Object.keys(soldPricesData).forEach(key => {
+        if (checkboxStatesData[key]) {
+          totalSold += parseFloat(soldPricesData[key] || '0');
         }
+      });
 
-        try {
-          const soldPricesData = JSON.parse(soldPrices);
-          const checkboxStatesData = JSON.parse(checkboxStates);
-          const investorAmountData = parseFloat(investorAmount);
+      const expensePerToy = 10;
+      const totalExpense = expensePerToy * 12;
+      const profitBeforeSharing = totalSold - totalExpense;
 
-          // Calculate total sold amount
-          let totalSold = 0;
-          Object.keys(soldPricesData).forEach(key => {
-            if (checkboxStatesData[key]) {
-              totalSold += parseFloat(soldPricesData[key] || '0');
-            }
-          });
+      localStorage.removeItem('soldPrices');
+      localStorage.removeItem('checkboxStates');
+      localStorage.removeItem('investorAmount');
 
-          // Calculate total spent (assuming a fixed expense per toy)
-          const expensePerToy = 10; // Example expense, adjust as needed
-          const totalExpense = expensePerToy * 12; //total expense for 12 planned toys
-
-          //Calculate profit before sharing with helpers
-          const profitBeforeSharing = totalSold - totalExpense;
-
-          // Clear local storage data after successful project completion
-          localStorage.removeItem('soldPrices');
-          localStorage.removeItem('checkboxStates');
-          localStorage.removeItem('investorAmount');
-
-          if (profitBeforeSharing > 0) {
-            router.push('/project-success');
-          } else {
-            router.push('/project-failure');
-          }
-        } catch (error) {
-          console.error('Error calculating profit or parsing data:', error);
-          alert('Error processing sales data. Please try again.');
-          router.push('/day-7');
-        }
+      if (profitBeforeSharing > 0) {
+        router.push('/project-success');
+      } else {
+        router.push('/project-failure');
+      }
+    } catch (error) {
+      console.error('Error calculating profit or parsing data:', error);
+      alert('Error processing sales data. Please try again.');
+      router.push('/day-7');
+    }
   };
 
   return (
     <div className="min-h-screen bg-[hsl(var(--secondary))] font-sans flex flex-col">
-      <Header/>
+      <Header />
 
       <main className="flex-grow p-8">
         <div className="bg-[hsl(var(--secondary))] rounded-3xl p-8 flex flex-col gap-6">
@@ -79,9 +71,9 @@ const DaySevenCompletionPage = () => {
 
           <div className="flex justify-center relative">
             {/* Timeline */}
-            <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-border z-0"/>
+            <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-border z-0" />
             {/* Stars */}
-            {Array.from({length: 7}).map((_, index) => {
+            {Array.from({ length: 7 }).map((_, index) => {
               const day = index + 1;
               const isCompleted = day <= 7;
               const isActive = day === 7;
@@ -146,7 +138,7 @@ const DaySevenCompletionPage = () => {
         </div>
       </main>
 
-      <Footer/>
+      <Footer />
     </div>
   );
 };

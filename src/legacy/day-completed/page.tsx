@@ -1,11 +1,11 @@
 'use client';
 
-import {Button} from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
-import {useRouter} from 'next/navigation';
-import React, {useEffect} from 'react';
-import {CheckCircle} from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import React, { useEffect } from 'react';
+import { CheckCircle } from 'lucide-react';
 import Image from 'next/image';
 
 interface DayCompletedProps {
@@ -14,9 +14,9 @@ interface DayCompletedProps {
   };
 }
 
-const DayCompletedPage: React.FC<DayCompletedProps> = ({searchParams}) => {
+const DayCompletedPage: React.FC<DayCompletedProps> = ({ searchParams }) => {
   const router = useRouter();
-  const {day = '1'} = searchParams; // Default to day 1
+  const { day = '1' } = searchParams;
 
   const nextDay = parseInt(day, 10) + 1;
   let nextDayPath = '';
@@ -49,7 +49,7 @@ const DayCompletedPage: React.FC<DayCompletedProps> = ({searchParams}) => {
     'https://i.pinimg.com/originals/79/9f/9b/799f9ba5ca59f32e512c89151727204e.png';
 
   useEffect(() => {
-    // Trigger confetti only for specific day completions
+
     if (day === '1' || day === '2' || day === '3' || day === '4' || day === '5') {
       const createConfetti = () => {
         const confettiCount = 200;
@@ -85,7 +85,7 @@ const DayCompletedPage: React.FC<DayCompletedProps> = ({searchParams}) => {
 
   return (
     <div className="min-h-screen bg-[#FAF0E6] font-sans flex flex-col">
-      <Header/>
+      <Header />
 
       <main className="flex-grow p-8 flex flex-col items-center justify-center">
         <div className="text-center">
@@ -106,7 +106,7 @@ const DayCompletedPage: React.FC<DayCompletedProps> = ({searchParams}) => {
         </div>
       </main>
 
-      <Footer/>
+      <Footer />
     </div>
   );
 };

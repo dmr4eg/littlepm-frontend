@@ -57,17 +57,13 @@ const App: React.FC = () => (
               element={<ProjectCompletePage />}
             />
 
-            {/* Auth */}
             <Route path="/login" element={<LoginPage />} />
             <Route path="/logout" element={<LogoutPage />} />
 
             {/* User */}
             {/*<Route path="/profile" element={<ProfilePage />} />*/}
 
-            {/* Registration */}
             <Route path="/reg" element={<RegPage />} />
-
-            {/* Catch-all: redirect unknown paths to home */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>

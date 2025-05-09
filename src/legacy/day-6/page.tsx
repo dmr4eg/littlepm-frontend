@@ -1,17 +1,17 @@
 'use client';
 
-import {Button} from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
-import {useRouter} from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import React, {useState, useRef, useEffect} from 'react';
-import {Input} from "@/components/ui/input";
-import {Loader2, Share2, X} from "lucide-react";
-import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle} from "@/components/ui/dialog";
+import React, { useState, useRef, useEffect } from 'react';
+import { Input } from "@/components/ui/input";
+import { Loader2, Share2, X } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
-import {CheckCircle} from 'lucide-react';
+import { CheckCircle } from 'lucide-react';
 import Link from 'next/link';
 
 const DaySixPage = () => {
@@ -28,9 +28,7 @@ const DaySixPage = () => {
   const [contactInfo, setContactInfo] = useState('');
 
   useEffect(() => {
-    // Ensure window is defined before using it
     if (typeof window !== 'undefined') {
-      // Check if there's a stored image URL in localStorage
       const storedImage = localStorage.getItem('uploadedImage');
       if (storedImage) {
         setSelectedImage(storedImage);
@@ -60,33 +58,29 @@ const DaySixPage = () => {
     try {
       setIsGenerating(true);
       const canvas = await html2canvas(reportRef.current, {
-          scale: 2, // Increase resolution
+        scale: 2,
       });
 
       const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF('p', 'mm', 'a4');
-      const imgProps= pdf.getImageProperties(imgData);
+      const imgProps = pdf.getImageProperties(imgData);
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-
-      // Download the PDF
       pdf.save("promotional_material.pdf");
-       // Optionally, display an error message to the user.
     } catch (error) {
       console.error("Error generating or downloading PDF:", error);
     } finally {
       setIsGenerating(false);
       setOpen(false);
-      // Redirect to the checklist page and pass the image
-       router.push('/day-6-checklist');
+      router.push('/day-6-checklist');
     }
   };
 
   return (
     <div className="min-h-screen bg-[hsl(var(--secondary))] font-sans flex flex-col">
-      <Header/>
+      <Header />
 
       <main className="flex-grow p-8">
         <div className="bg-[hsl(var(--secondary))] rounded-3xl p-8 flex flex-col gap-6">
@@ -102,9 +96,9 @@ const DaySixPage = () => {
 
           <div className="flex justify-center relative">
             {/* Timeline */}
-            <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-border z-0"/>
+            <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-border z-0" />
             {/* Stars */}
-            {Array.from({length: 7}).map((_, index) => {
+            {Array.from({ length: 7 }).map((_, index) => {
               const day = index + 1;
               const isActive = day === 6;
               const isCompleted = day < 6;
@@ -216,7 +210,7 @@ const DaySixPage = () => {
               <video
                 controls
                 className="w-full rounded-md"
-                style={{height: '200px'}}>
+                style={{ height: '200px' }}>
                 <source
                   src="https://www.w3schools.com/html/mov_bbb.mp4"
                   type="video/mp4"
@@ -232,7 +226,7 @@ const DaySixPage = () => {
         </div>
       </main>
 
-      <Footer/>
+      <Footer />
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto bg-[hsl(var(--secondary))]">
@@ -242,7 +236,7 @@ const DaySixPage = () => {
             </DialogTitle>
           </DialogHeader>
           <DialogDescription className="text-center">
-             {/* Description */}
+            {/* Description */}
           </DialogDescription>
 
           <div ref={reportRef} className="flex flex-col gap-4 mt-4 items-center">
@@ -271,10 +265,10 @@ const DaySixPage = () => {
             </Button>
           </div>
           <div className="absolute top-4 right-4">
-             <Button variant="ghost" size="icon" onClick={() => setOpen(false)}>
-                <X className="h-4 w-4"/>
-              </Button>
-            </div>
+            <Button variant="ghost" size="icon" onClick={() => setOpen(false)}>
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
     </div>

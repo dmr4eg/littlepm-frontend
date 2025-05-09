@@ -1,9 +1,9 @@
 'use client';
 
-import {Button} from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
-import {useRouter} from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 const ProjectDetailsPage = () => {
   const router = useRouter();
@@ -21,9 +21,9 @@ const ProjectDetailsPage = () => {
             {/* Timeline */}
             <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-border z-0" />
             {/* Stars */}
-            {Array.from({length: 7}).map((_, index) => {
+            {Array.from({ length: 7 }).map((_, index) => {
               const day = index + 1;
-              const isActive = day === 1; // Day 1 is active
+              const isActive = day === 1;
               return (
                 <div key={index} className="relative z-10">
                   {isActive ? (
@@ -74,7 +74,7 @@ const ProjectDetailsPage = () => {
               <video
                 controls
                 className="w-full rounded-md"
-                style={{height: '200px'}}>
+                style={{ height: '200px' }}>
                 <source
                   src="https://www.w3schools.com/html/mov_bbb.mp4"
                   type="video/mp4"

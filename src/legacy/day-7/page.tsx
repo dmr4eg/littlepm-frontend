@@ -1,29 +1,27 @@
 'use client';
 
-import {Button} from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
-import {useRouter} from 'next/navigation';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import {CheckCircle} from 'lucide-react';
+import { CheckCircle } from 'lucide-react';
 import Link from 'next/link';
-import React, {useState, useEffect, useRef} from 'react';
-import {Checkbox} from "@/components/ui/checkbox";
-import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle} from "@/components/ui/dialog";
+import React, { useState, useEffect, useRef } from 'react';
+import { Checkbox } from "@/components/ui/checkbox";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
-import {X} from "lucide-react";
-import {Share2, Download} from "lucide-react";
+import { X } from "lucide-react";
+import { Share2, Download } from "lucide-react";
 
 const DaySevenPage = () => {
   const router = useRouter();
-  const [soldPrices, setSoldPrices] = useState<{[key: string]: string}>({});
-  const [checkboxStates, setCheckboxStates] = useState<{[key: string]: boolean}>({});
+  const [soldPrices, setSoldPrices] = useState<{ [key: string]: string }>({});
+  const [checkboxStates, setCheckboxStates] = useState<{ [key: string]: boolean }>({});
   const [open, setOpen] = React.useState(false);
   const reportRef = useRef<HTMLDivElement>(null);
-
-  // State variables for sales report data
   const [investorAmount, setInvestorAmount] = useState('');
   const [returnAmount, setReturnAmount] = useState('');
   const [totalSpent, setTotalSpent] = useState('');
@@ -34,7 +32,6 @@ const DaySevenPage = () => {
   const [helperAmounts, setHelperAmounts] = useState(['0.00', '0.00', '0.00', '0.00', '0.00']);
 
   useEffect(() => {
-    // Load data from local storage on component mount
     const storedSoldPrices = localStorage.getItem('soldPrices');
     const storedCheckboxStates = localStorage.getItem('checkboxStates');
     const investorMoney = localStorage.getItem('investorMoney');
@@ -45,8 +42,8 @@ const DaySevenPage = () => {
     if (storedCheckboxStates) {
       setCheckboxStates(JSON.parse(storedCheckboxStates));
     }
-    if (investorMoney){
-        setInvestorAmount(investorMoney);
+    if (investorMoney) {
+      setInvestorAmount(investorMoney);
     }
   }, []);
 
@@ -63,92 +60,79 @@ const DaySevenPage = () => {
     }));
   };
 
-    const handleCheckboxChange = (index: number) => {
-        const toyId = `toy-${index}`;
-        const newCheckboxState = !checkboxStates[toyId];
+  const handleCheckboxChange = (index: number) => {
+    const toyId = `toy-${index}`;
+    const newCheckboxState = !checkboxStates[toyId];
+    if (newCheckboxState) {
+      const price = soldPrices[toyId] || '';
+      localStorage.setItem(`soldPrice-${index}`, price);
+    } else {
+      localStorage.removeItem(`soldPrice-${index}`);
+    }
 
-        // If the checkbox is being checked, also save the corresponding price to local storage
-        if (newCheckboxState) {
-            const price = soldPrices[toyId] || ''; // Get the current price from the state
-            localStorage.setItem(`soldPrice-${index}`, price);
-        } else {
-            // If the checkbox is being unchecked, remove the corresponding price from local storage
-            localStorage.removeItem(`soldPrice-${index}`);
-        }
+    setCheckboxStates(prev => {
+      const updatedCheckboxStates = { ...prev, [toyId]: newCheckboxState };
+      localStorage.setItem('checkboxStates', JSON.stringify(updatedCheckboxStates));
+      return updatedCheckboxStates;
+    });
 
-        setCheckboxStates(prev => {
-            const updatedCheckboxStates = {...prev, [toyId]: newCheckboxState};
-            localStorage.setItem('checkboxStates', JSON.stringify(updatedCheckboxStates));
-            return updatedCheckboxStates;
-        });
-
-        // Disable the checkbox immediately after it's clicked
-        setTimeout(() => {
-            setCheckboxStates(prev => ({...prev, [toyId]: newCheckboxState}));
-        }, 0);
-    };
+    setTimeout(() => {
+      setCheckboxStates(prev => ({ ...prev, [toyId]: newCheckboxState }));
+    }, 0);
+  };
 
   const calculateSalesReport = () => {
-      let totalSold = 0;
-      Object.keys(soldPrices).forEach(key => {
-          if (checkboxStates[key]) {
-              totalSold += parseFloat(soldPrices[key] || '0');
-          }
-      });
-      setToysSold(totalSold.toFixed(2));
+    let totalSold = 0;
+    Object.keys(soldPrices).forEach(key => {
+      if (checkboxStates[key]) {
+        totalSold += parseFloat(soldPrices[key] || '0');
+      }
+    });
+    setToysSold(totalSold.toFixed(2));
 
-      // Calculate total spent (assuming a fixed expense per toy)
-      const expensePerToy = 10; // Example expense, adjust as needed
-      const totalExpense = expensePerToy * 12; //total expense for 12 planned toys
-      setTotalSpent(totalExpense.toFixed(2));
+    const expensePerToy = 10;
+    const totalExpense = expensePerToy * 12;
+    setTotalSpent(totalExpense.toFixed(2));
 
-      //Calculate toysPrepared =12
+    const toyCount = 12;
+    setToysPrepared(toyCount.toString());
 
-      const toyCount=12;
-      setToysPrepared(toyCount.toString());
+    const toysL = toyCount - Object.keys(soldPrices).length;
+    setToysLeft(toysL.toString());
 
-      const toysL=toyCount- Object.keys(soldPrices).length;
-      setToysLeft(toysL.toString());
+    const profit = totalSold - totalExpense;
+    setProfitBeforeSharing(profit.toFixed(2));
+    const toysLeftNum = parseInt(toysLeft);
+    const returnAmountCalc = totalExpense - (toysLeftNum > 0 ? (toysLeftNum * expensePerToy) : 0);
 
-      // Example calculation for profit before sharing
-      const profit = totalSold - totalExpense;
-      setProfitBeforeSharing(profit.toFixed(2));
-
-      // You'll need to fetch the investorAmount from wherever it's stored
-
-      const toysLeftNum= parseInt(toysLeft);
-
-      const returnAmountCalc = totalExpense - (toysLeftNum > 0 ? (toysLeftNum*expensePerToy) : 0);
-
-      setReturnAmount(returnAmountCalc.toString());
+    setReturnAmount(returnAmountCalc.toString());
   };
 
   const handleDownload = async () => {
-        if (!reportRef.current) return;
+    if (!reportRef.current) return;
 
-        try {
-          const canvas = await html2canvas(reportRef.current, {
-              scale: 2, // Increase resolution
-          });
+    try {
+      const canvas = await html2canvas(reportRef.current, {
+        scale: 2,
+      });
 
-          const imgData = canvas.toDataURL('image/png');
-            const link = document.createElement('a');
-            link.href = imgData;
-            link.download = 'sales_report.png'; // Set the filename
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        } catch (error) {
-          console.error("Error generating or downloading PNG:", error);
-          // Optionally, display an error message to the user.
-        } finally {
-          setOpen(false);
-        }
+      const imgData = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.href = imgData;
+      link.download = 'sales_report.png';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Error generating or downloading PNG:", error);
+    } finally {
+      setOpen(false);
+    }
   };
 
   return (
     <div className="min-h-screen bg-[hsl(var(--secondary))] font-sans flex flex-col">
-      <Header/>
+      <Header />
 
       <main className="flex-grow p-8">
         <div className="bg-[hsl(var(--secondary))] rounded-3xl p-8 flex flex-col gap-6">
@@ -164,9 +148,9 @@ const DaySevenPage = () => {
 
           <div className="flex justify-center relative">
             {/* Timeline */}
-            <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-border z-0"/>
+            <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-border z-0" />
             {/* Stars */}
-            {Array.from({length: 7}).map((_, index) => {
+            {Array.from({ length: 7 }).map((_, index) => {
               const day = index + 1;
               const isCompleted = day <= 6;
               const isActive = day === 7;
@@ -221,39 +205,39 @@ const DaySevenPage = () => {
           <div>
             <div className="font-bold">Log here details of the sold toys</div>
             <ul className="list-none pl-0">
-              {Array.from({length: 12}).map((_, index) => {
-                  const toyId = `toy-${index}`;
-                  return (
-                    <li key={index} className="flex justify-between items-center py-2">
-                      <div className="flex items-center">
-                        <Checkbox
-                          id={toyId}
-                          checked={checkboxStates[toyId] || false}
-                          onCheckedChange={() => handleCheckboxChange(index)}
-                          disabled={checkboxStates[toyId] || false}
-                        />
-                        <label htmlFor={toyId} className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                          Enter Sold Price (CZK)
-                        </label>
-                      </div>
-                      <input
-                        type="text"
-                        placeholder="00.00 CZK"
-                        className="border rounded p-1 w-32 text-right"
-                        value={soldPrices[toyId] || ''}
-                        onChange={(e) => handlePriceChange(index, e.target.value)}
-                        disabled={checkboxStates[toyId] !== undefined}
+              {Array.from({ length: 12 }).map((_, index) => {
+                const toyId = `toy-${index}`;
+                return (
+                  <li key={index} className="flex justify-between items-center py-2">
+                    <div className="flex items-center">
+                      <Checkbox
+                        id={toyId}
+                        checked={checkboxStates[toyId] || false}
+                        onCheckedChange={() => handleCheckboxChange(index)}
+                        disabled={checkboxStates[toyId] || false}
                       />
-                    </li>
-                  );
-                })}
+                      <label htmlFor={toyId} className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                        Enter Sold Price (CZK)
+                      </label>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="00.00 CZK"
+                      className="border rounded p-1 w-32 text-right"
+                      value={soldPrices[toyId] || ''}
+                      onChange={(e) => handlePriceChange(index, e.target.value)}
+                      disabled={checkboxStates[toyId] !== undefined}
+                    />
+                  </li>
+                );
+              })}
             </ul>
           </div>
 
           <div className="flex justify-between">
             <Button variant="outline" onClick={() => {
-                calculateSalesReport();
-                setOpen(true);
+              calculateSalesReport();
+              setOpen(true);
             }}>
               View sales report
             </Button>
@@ -264,133 +248,133 @@ const DaySevenPage = () => {
         </div>
       </main>
 
-      <Footer/>
-       <Dialog open={open} onOpenChange={setOpen}>
-          <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto bg-[hsl(var(--secondary))]">
-            <DialogHeader>
-              <DialogTitle className="text-center">
-                Sales Report (P&L)
-                <br />
-                Cat Toy Project
-              </DialogTitle>
-            </DialogHeader>
-            <DialogDescription className="text-center">
-               {/* Description */}
-            </DialogDescription>
+      <Footer />
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto bg-[hsl(var(--secondary))]">
+          <DialogHeader>
+            <DialogTitle className="text-center">
+              Sales Report (P&L)
+              <br />
+              Cat Toy Project
+            </DialogTitle>
+          </DialogHeader>
+          <DialogDescription className="text-center">
+            {/* Description */}
+          </DialogDescription>
 
-            <div ref={reportRef} className="flex flex-col gap-4 mt-4 items-center">
-              <div className="flex justify-between items-center">
-                  <label>Amount of money given by investor</label>
-                  <input
-                    type="text"
-                    placeholder="Prefilled from DB"
-                    className="border rounded p-1 w-32 text-right"
-                    readOnly
-                    value={investorAmount}
-                  />
-              </div>
-              <div className="flex justify-between items-center">
-                  <label>How much you want to give back to investor</label>
-                  <input
-                    type="text"
-                    placeholder="Prefilled from DB"
-                    className="border rounded p-1 w-32 text-right"
-                    readOnly
-                    value={returnAmount}
-                  />
-              </div>
-              <div className="flex justify-between items-center">
-                  <label>Spent in total</label>
-                  <input
-                    type="text"
-                    placeholder="Prefilled from DB"
-                    className="border rounded p-1 w-32 text-right"
-                    readOnly
-                    value={totalSpent}
-                  />
-              </div>
-              <div className="flex justify-between items-center">
-                  <label>Number of toys prepared</label>
-                  <input
-                    type="text"
-                    placeholder="Prefilled from DB"
-                    className="border rounded p-1 w-32 text-right"
-                    readOnly
-                    value={toysPrepared}
-                  />
-              </div>
-              <div className="flex justify-between items-center">
-                  <label>Number of sold toys</label>
-                  <input
-                    type="text"
-                    placeholder="Prefilled from DB"
-                    className="border rounded p-1 w-32 text-right"
-                    readOnly
-                    value={toysSold}
-                  />
-              </div>
-              <div className="flex justify-between items-center">
-                  <label>Number of toys left</label>
-                  <input
-                    type="text"
-                    placeholder="Prefilled from DB"
-                    className="border rounded p-1 w-32 text-right"
-                    readOnly
-                    value={toysLeft}
-                  />
-              </div>
+          <div ref={reportRef} className="flex flex-col gap-4 mt-4 items-center">
+            <div className="flex justify-between items-center">
+              <label>Amount of money given by investor</label>
+              <input
+                type="text"
+                placeholder="Prefilled from DB"
+                className="border rounded p-1 w-32 text-right"
+                readOnly
+                value={investorAmount}
+              />
+            </div>
+            <div className="flex justify-between items-center">
+              <label>How much you want to give back to investor</label>
+              <input
+                type="text"
+                placeholder="Prefilled from DB"
+                className="border rounded p-1 w-32 text-right"
+                readOnly
+                value={returnAmount}
+              />
+            </div>
+            <div className="flex justify-between items-center">
+              <label>Spent in total</label>
+              <input
+                type="text"
+                placeholder="Prefilled from DB"
+                className="border rounded p-1 w-32 text-right"
+                readOnly
+                value={totalSpent}
+              />
+            </div>
+            <div className="flex justify-between items-center">
+              <label>Number of toys prepared</label>
+              <input
+                type="text"
+                placeholder="Prefilled from DB"
+                className="border rounded p-1 w-32 text-right"
+                readOnly
+                value={toysPrepared}
+              />
+            </div>
+            <div className="flex justify-between items-center">
+              <label>Number of sold toys</label>
+              <input
+                type="text"
+                placeholder="Prefilled from DB"
+                className="border rounded p-1 w-32 text-right"
+                readOnly
+                value={toysSold}
+              />
+            </div>
+            <div className="flex justify-between items-center">
+              <label>Number of toys left</label>
+              <input
+                type="text"
+                placeholder="Prefilled from DB"
+                className="border rounded p-1 w-32 text-right"
+                readOnly
+                value={toysLeft}
+              />
+            </div>
 
-              <div className="flex justify-between items-center">
-                  <label>Profit before sharing with helpers</label>
+            <div className="flex justify-between items-center">
+              <label>Profit before sharing with helpers</label>
+              <input
+                type="text"
+                placeholder="00.00 CZK"
+                className="border rounded p-1 w-32 text-right"
+                readOnly
+                value={profitBeforeSharing}
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              {helperAmounts.map((amount, index) => (
+                <div className="flex justify-between items-center" key={index}>
+                  <label>Helper #{index + 1}</label>
                   <input
                     type="text"
                     placeholder="00.00 CZK"
                     className="border rounded p-1 w-32 text-right"
                     readOnly
-                    value={profitBeforeSharing}
+                    value={amount}
                   />
-              </div>
-
-              <div className="flex flex-col gap-2">
-                  {helperAmounts.map((amount, index) => (
-                      <div className="flex justify-between items-center" key={index}>
-                          <label>Helper #{index + 1}</label>
-                          <input
-                            type="text"
-                            placeholder="00.00 CZK"
-                            className="border rounded p-1 w-32 text-right"
-                            readOnly
-                            value={amount}
-                          />
-                      </div>
-                  ))}
-              </div>
-
-              <div className="flex justify-between items-center">
-                  <label>How much money you made</label>
-                  <input
-                    type="text"
-                    placeholder="00.00 CZK"
-                    className="border rounded p-1 w-32 text-right"
-                    readOnly
-                    value={profitBeforeSharing}
-                  />
-              </div>
+                </div>
+              ))}
             </div>
 
-            <div className="flex justify-center mt-6">
-              <Button variant="outline" onClick={handleDownload}>
-                <Download className="mr-2 h-4 w-4" />
-                Download
-              </Button>
+            <div className="flex justify-between items-center">
+              <label>How much money you made</label>
+              <input
+                type="text"
+                placeholder="00.00 CZK"
+                className="border rounded p-1 w-32 text-right"
+                readOnly
+                value={profitBeforeSharing}
+              />
             </div>
-            <div className="absolute top-4 right-4">
-               <Button variant="ghost" size="icon" onClick={() => setOpen(false)}>
-                  <X className="h-4 w-4"/>
-                </Button>
-              </div>
-          </DialogContent>
-        </Dialog>
+          </div>
+
+          <div className="flex justify-center mt-6">
+            <Button variant="outline" onClick={handleDownload}>
+              <Download className="mr-2 h-4 w-4" />
+              Download
+            </Button>
+          </div>
+          <div className="absolute top-4 right-4">
+            <Button variant="ghost" size="icon" onClick={() => setOpen(false)}>
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

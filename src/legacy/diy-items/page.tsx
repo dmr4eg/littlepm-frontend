@@ -1,14 +1,14 @@
 'use client';
 
-import {Button} from '@/components/ui/button';
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
-import {useRouter} from 'next/navigation';
-import {ChevronLeft} from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
-import {useState, useEffect} from 'react';
-import {Input} from "@/components/ui/input";
+import { useState, useEffect } from 'react';
+import { Input } from "@/components/ui/input";
 
 const DIYItemsPage = () => {
   const router = useRouter();
@@ -19,7 +19,6 @@ const DIYItemsPage = () => {
   const [toyCount, setToyCount] = useState(10);
 
   useEffect(() => {
-    // Load values from local storage on component mount
     const storedStickPrice = localStorage.getItem('stickPrice');
     const storedFeathersPrice = localStorage.getItem('feathersPrice');
     const storedPomponPrice = localStorage.getItem('pomponPrice');
@@ -33,9 +32,8 @@ const DIYItemsPage = () => {
     if (storedToyCount) setToyCount(parseInt(storedToyCount, 10) || 10);
   }, []);
 
-  // Function to handle changes in input fields and save to local storage
   const handlePriceChange = (setter: (value: string) => void, key: string, value: string) => {
-    // Validate if the input is a number
+
     if (!isNaN(Number(value)) || value === '') {
       setter(value);
       localStorage.setItem(key, value);
@@ -50,11 +48,11 @@ const DIYItemsPage = () => {
   };
 
   const items = [
-    {name: 'Stick', quantity: '10 pieces', price: stickPrice, setPrice: setStickPrice, localStorageKey: 'stickPrice'},
-    {name: 'Feathers', quantity: '5-7 pieces per 1 toy', price: feathersPrice, setPrice: setFeathersPrice, localStorageKey: 'feathersPrice'},
-    {name: 'Pompon', quantity: 'big size 10 pieces', price: pomponPrice, setPrice: setPomponPrice, localStorageKey: 'pomponPrice'},
-    {name: 'Rope', quantity: '50 cm per 1 toy', price: ropePrice, setPrice: setRopePrice, localStorageKey: 'ropePrice'},
-    {name: 'Hot glue', quantity: '', price: '', setPrice: () => {}, localStorageKey: ''}, // Hot glue doesn't have a price
+    { name: 'Stick', quantity: '10 pieces', price: stickPrice, setPrice: setStickPrice, localStorageKey: 'stickPrice' },
+    { name: 'Feathers', quantity: '5-7 pieces per 1 toy', price: feathersPrice, setPrice: setFeathersPrice, localStorageKey: 'feathersPrice' },
+    { name: 'Pompon', quantity: 'big size 10 pieces', price: pomponPrice, setPrice: setPomponPrice, localStorageKey: 'pomponPrice' },
+    { name: 'Rope', quantity: '50 cm per 1 toy', price: ropePrice, setPrice: setRopePrice, localStorageKey: 'ropePrice' },
+    { name: 'Hot glue', quantity: '', price: '', setPrice: () => { }, localStorageKey: '' }, // Hot glue doesn't have a price
   ];
 
   return (
@@ -76,9 +74,9 @@ const DIYItemsPage = () => {
             {/* Timeline */}
             <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-border z-0" />
             {/* Stars */}
-            {Array.from({length: 7}).map((_, index) => {
+            {Array.from({ length: 7 }).map((_, index) => {
               const day = index + 1;
-              const isActive = day === 1; // Day 1 is active
+              const isActive = day === 1;
               return (
                 <div key={index} className="relative z-10">
                   {isActive ? (
@@ -115,7 +113,6 @@ const DIYItemsPage = () => {
               </SelectContent>
             </Select>
             <Button variant="outline" size="icon">
-              {/* Replace with appropriate icon if needed */}
               <span>▶</span>
             </Button>
           </div>
@@ -135,7 +132,7 @@ const DIYItemsPage = () => {
                       onChange={(e) => item.setPrice(e.target.value)}
                     />
                   ) : (
-                    <span></span> // No input for Hot glue
+                    <span></span>
                   )}
                 </li>
               ))}

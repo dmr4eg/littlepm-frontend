@@ -20,34 +20,24 @@ export const DayCompletion: React.FC<DayCompletionProps> = ({ dayId }) => {
         const fetchData = async () => {
             try {
                 setIsLoading(true);
-                // Fetch day data
                 const data = await daysApi.dayInstancesDayBlueprintUuidUserUuidGet({
                     dayBlueprintUuid: dayId,
                     userUuid: 'current'
                 });
                 setDayData(data);
-
-                // Get project blueprint UUID from the route
                 const projectBlueprintUuid = router.query.projectblueprintuuid as string;
                 if (!projectBlueprintUuid) return;
-
-                // Fetch all project-day mappings
                 const projectDays = await projectsApi.projectDaysMapperGet({
                     limit: 100,
                     offset: 0
                 });
-
-                // Filter and sort days for this project
                 const projectDayMappers = projectDays
                     .filter(mapper => mapper.id.projectBlueprintUuid === projectBlueprintUuid)
                     .sort((a, b) => a.sortOrder - b.sortOrder);
 
-                // Find current day index
                 const currentDayIndex = projectDayMappers.findIndex(
                     mapper => mapper.id.dayBlueprintUuid === dayId
                 );
-
-                // Get next day if available
                 if (currentDayIndex !== -1 && currentDayIndex < projectDayMappers.length - 1) {
                     setNextDayId(projectDayMappers[currentDayIndex + 1].id.dayBlueprintUuid);
                 }

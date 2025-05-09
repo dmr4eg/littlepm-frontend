@@ -13,15 +13,12 @@ const LogoutPage: React.FC = () => {
     const handleLogout = async () => {
         setIsProcessing(true);
         try {
-            // Clear cookies
             document.cookie.split(';').forEach((c) => {
                 document.cookie = c
                     .replace(/^ +/, '')
                     .replace(/=.*/, `=;expires=${new Date().toUTCString()};path=/`);
             });
-            // Clear local storage
             localStorage.clear();
-            // Keycloak logout (redirects to login)
             keycloak.logout({ redirectUri: window.location.origin + '/login' });
         } catch (error) {
             setIsProcessing(false);
@@ -54,7 +51,6 @@ const LogoutPage: React.FC = () => {
                 </div>
             </header>
 
-            {/* Blurred background image */}
             <div className="absolute inset-0 z-0">
                 <img
                     src="/assets/login-bg-blur.jpg"
@@ -62,8 +58,6 @@ const LogoutPage: React.FC = () => {
                     className="w-full h-full object-cover blur-md opacity-60 rounded-3xl"
                 />
             </div>
-
-            {/* Centered Modal */}
             <main className="flex-grow flex items-center justify-center z-10 relative">
                 <div className="bg-[#F8E9D2] rounded-2xl shadow-2xl px-10 py-8 w-full max-w-md flex flex-col items-center relative border border-yellow-200">
                     <h2 className="text-2xl font-handwriting font-bold mb-6 text-center text-black">Logout</h2>
@@ -86,8 +80,6 @@ const LogoutPage: React.FC = () => {
                     </div>
                 </div>
             </main>
-
-            {/* Footer */}
             <footer className="w-full bg-yellow-300 rounded-t-3xl px-8 py-4 flex flex-col md:flex-row justify-between items-center text-sm text-black z-10 relative">
                 <div className="flex items-center space-x-4 mb-2 md:mb-0">
                     <span>Email: info@little.pm</span>

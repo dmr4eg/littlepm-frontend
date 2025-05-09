@@ -5,7 +5,6 @@
 // 3. send post request to create project instance
 // 4. redirect to project route with blueprint uuid
 
-// 1) react & routing
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
@@ -14,13 +13,13 @@ import type {
     ProjectBlueprint,
     ProjectDTO,
     ProjectInstance
-} from '@/api-course';                                  // generated models
+} from '@/api-course';  // generated models
 
 const ProjectCreatePage: React.FC = () => {
     const router = useRouter();
     const [blueprints, setBlueprints] = useState<ProjectBlueprint[]>([]);
-    const [isLoading,  setIsLoading ] = useState(true);
-    const [error,      setError     ] = useState<Error | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<Error | null>(null);
 
     useEffect(() => {
         const loadBlueprints = async () => {
@@ -57,7 +56,7 @@ const ProjectCreatePage: React.FC = () => {
     };
 
     if (isLoading) return <div>Loading…</div>;
-    if (error)     return <div>Error: {error.message}</div>;
+    if (error) return <div>Error: {error.message}</div>;
 
     return (
         <div className="project-create-page">

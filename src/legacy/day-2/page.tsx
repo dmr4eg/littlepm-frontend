@@ -1,13 +1,13 @@
 'use client';
 
-import {Button} from '@/components/ui/button';
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
-import {useRouter} from 'next/navigation';
-import {ChevronLeft, Play} from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { ChevronLeft, Play } from 'lucide-react';
 import Link from 'next/link';
-import {Checkbox} from '@/components/ui/checkbox';
+import { Checkbox } from '@/components/ui/checkbox';
 import Image from 'next/image';
 import React from 'react';
 
@@ -34,9 +34,9 @@ const DayTwoPage = () => {
             {/* Timeline */}
             <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-border z-0" />
             {/* Stars */}
-            {Array.from({length: 7}).map((_, index) => {
+            {Array.from({ length: 7 }).map((_, index) => {
               const day = index + 1;
-              const isActive = day === 2; // Day 2 is active
+              const isActive = day === 2;
               const isCompleted = day < 2;
               return (
                 <div key={index} className="relative z-10">
@@ -86,7 +86,7 @@ const DayTwoPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <ul className="list-none pl-0">
-                {Array.from({length: 5}).map((_, index) => (
+                {Array.from({ length: 5 }).map((_, index) => (
                   <li key={index} className="flex justify-between items-center py-2">
                     <span>{index + 1}. Predefined role</span>
                     <input type="text" placeholder="Enter Name" className="border rounded p-1" />
@@ -110,7 +110,7 @@ const DayTwoPage = () => {
               <video
                 controls
                 className="w-full rounded-md"
-                style={{height: '200px'}}>
+                style={{ height: '200px' }}>
                 <source
                   src="https://www.w3schools.com/html/mov_bbb.mp4"
                   type="video/mp4"

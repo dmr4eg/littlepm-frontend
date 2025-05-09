@@ -5,9 +5,9 @@ import ProjectCard from '@/components/ProjectCard';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import Link from 'next/link';
-import {Button} from '@/components/ui/button';
-import {useRouter} from 'next/navigation';
-import {Plus} from "lucide-react";
+import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
+import { Plus } from "lucide-react";
 
 const projects = [
   {
@@ -44,17 +44,17 @@ export default function Home() {
               <ProjectCard
                 title="Your Finished Project Results"
                 description=""
-                imageUrl="https://picsum.photos/id/242/300/200" // Replace with a relevant image
+                imageUrl="https://picsum.photos/id/242/300/200"
               />
             </Link>
-              <Link href="/user-projects" key="user-projects">
-                <ProjectCard
-                  title="Your Projects In Progress"
-                  description=""
-                  imageUrl="https://picsum.photos/id/237/300/200"
-                />
-              </Link>
-             <Link href="/project-blueprints" key="create-project">
+            <Link href="/user-projects" key="user-projects">
+              <ProjectCard
+                title="Your Projects In Progress"
+                description=""
+                imageUrl="https://picsum.photos/id/237/300/200"
+              />
+            </Link>
+            <Link href="/project-blueprints" key="create-project">
               <ProjectCard
                 title="Start new business project"
                 description=""
@@ -62,7 +62,7 @@ export default function Home() {
               />
             </Link>
 
-            
+
           </div>
         </div>
       </main>
