@@ -21,7 +21,7 @@ import DayPage from './pages/DayPage';
 import DayTransitPage from './pages/DayTransitPage';
 import LoginPage from './pages/LoginPage';
 import LogoutPage from './pages/LogoutPage';
-import ProfilePage from './pages/ProfilePage';
+// import ProfilePage from './pages/ProfilePage';
 import ProjectCompletePage from './pages/ProjectCompletePage';
 import CreateProjectPage from './pages/ProjectCreatePage';
 import ProjectPage from './pages/ProjectPage';
@@ -62,7 +62,7 @@ const App: React.FC = () => (
             <Route path="/logout" element={<LogoutPage />} />
 
             {/* User */}
-            <Route path="/profile" element={<ProfilePage />} />
+            {/*<Route path="/profile" element={<ProfilePage />} />*/}
 
             {/* Registration */}
             <Route path="/reg" element={<RegPage />} />

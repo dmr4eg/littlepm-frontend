@@ -29,7 +29,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             try {
                 const authenticated = await keycloak.init({
                     onLoad: 'check-sso',
-                    silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
+                    // silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
                     pkceMethod: 'S256'
                 });
 
