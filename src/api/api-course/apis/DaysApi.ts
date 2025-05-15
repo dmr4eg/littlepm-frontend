@@ -19,7 +19,7 @@ import type {
   DayComponentsMapper,
   DayDTO,
   DayInstance,
-} from '../models/index';
+} from '../models';
 import {
     DayBlueprintFromJSON,
     DayBlueprintToJSON,
@@ -29,7 +29,7 @@ import {
     DayDTOToJSON,
     DayInstanceFromJSON,
     DayInstanceToJSON,
-} from '../models/index';
+} from '../models';
 
 export interface DayComponentsMapperDayBlueprintUuidComponentUuidDeleteRequest {
     dayBlueprintUuid: string;

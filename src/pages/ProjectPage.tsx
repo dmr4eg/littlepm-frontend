@@ -7,10 +7,10 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { projectsApi, daysApi } from '@/api-course/services/api-course';
-import type { ProjectDTO, ProjectDaysMapper } from '@/api-course';
-import { ProjectInstanceStatusEnum } from '@/api-course/models/ProjectInstance';
-import { DayInstanceStatusEnum } from '@/api-course/models/DayInstance';
+import { projectsApi, daysApi } from '@/api/api-course/services/api-course';
+import type { ProjectDTO, ProjectDaysMapper } from 'src/api/api-course';
+import { ProjectInstanceStatusEnum } from '@/api/api-course/models/ProjectInstance';
+import { DayInstanceStatusEnum } from '@/api/api-course/models/DayInstance';
 import { useAuth } from '@/contexts/AuthContext';
 import keycloak from '@/configs/keycloak';
 

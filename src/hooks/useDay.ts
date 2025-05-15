@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import DefaultApi from '../api/controllers/DefaultApi';
-import DayDTO from '../api/models/DayDTO';
+import {DayDTO} from '../api/api-course/models/DayDTO';
 
 export const useDay = (dayId: string) => {
     const [data, setData] = useState<DayDTO | null>(null);

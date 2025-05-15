@@ -1,4 +1,4 @@
-import type { Finances } from '@/api-course/models/Finances';
+import type { Finances } from '@/api/api-course/models/Finances';
 
 export interface FinancesId {
     projectBlueprintUuid: string;

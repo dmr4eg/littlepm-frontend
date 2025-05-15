@@ -1,11 +1,8 @@
-// import { StrictMode } from 'react'
-
 import './styles/index.css'
 import App from './App'
 import { ReactKeycloakProvider } from '@react-keycloak/web'
 import keycloak from './configs/keycloak'
 import { createRoot } from 'react-dom/client'
-// import Dashboard from './pages/Dashboard.tsx'
 
 const initOptions = {
     onLoad: 'login-required',

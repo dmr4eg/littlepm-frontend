@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { daysApi } from '@/api-course/services/api-course';
-import { tasksApi } from '@/api-content/services/api-content';
-import type { DayComponentsMapper } from '@/api-course';
-import type { TaskDTO } from '@/api-content';
+import { daysApi } from '@/api/api-course/services/api-course';
+import { tasksApi } from '@/api/api-content/services/api-content';
+import type { DayComponentsMapper } from 'src/api/api-course';
+import type { TaskDTO } from 'src/api/api-content';
 
 interface DayChecklistProps {
     dayId: string;

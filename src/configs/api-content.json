@@ -1,6 +1,6 @@
 {
     "api": {
-        "API_BASE_URL": "https://api.example.com",
+        "API_BASE_URL": "https://app.little.pm/api/content",
         "timeout": 5000
     }
 }

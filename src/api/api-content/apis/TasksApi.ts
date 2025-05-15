@@ -18,7 +18,7 @@ import type {
   TaskBlueprint,
   TaskDTO,
   TaskInstance,
-} from '../models/index';
+} from '../models';
 import {
     TaskBlueprintFromJSON,
     TaskBlueprintToJSON,
@@ -26,7 +26,7 @@ import {
     TaskDTOToJSON,
     TaskInstanceFromJSON,
     TaskInstanceToJSON,
-} from '../models/index';
+} from '../models';
 
 export interface TaskInstancesGetRequest {
     userUuid: string;

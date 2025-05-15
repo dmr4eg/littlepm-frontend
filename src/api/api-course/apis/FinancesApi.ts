@@ -16,11 +16,11 @@
 import * as runtime from '../runtime';
 import type {
   Finances,
-} from '../models/index';
+} from '../models';
 import {
     FinancesFromJSON,
     FinancesToJSON,
-} from '../models/index';
+} from '../models';
 
 export interface FinancesGetRequest {
     limit: number;

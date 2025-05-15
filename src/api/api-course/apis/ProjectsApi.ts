@@ -19,7 +19,7 @@ import type {
   ProjectDTO,
   ProjectDaysMapper,
   ProjectInstance,
-} from '../models/index';
+} from '../models';
 import {
     ProjectBlueprintFromJSON,
     ProjectBlueprintToJSON,
@@ -29,7 +29,7 @@ import {
     ProjectDaysMapperToJSON,
     ProjectInstanceFromJSON,
     ProjectInstanceToJSON,
-} from '../models/index';
+} from '../models';
 
 export interface ProjectDaysMapperGetRequest {
     limit: number;

@@ -19,7 +19,7 @@ import type {
   FormDTO,
   FormFieldMapper,
   FormInstance,
-} from '../models/index';
+} from '../models';
 import {
     FormBlueprintFromJSON,
     FormBlueprintToJSON,
@@ -29,7 +29,7 @@ import {
     FormFieldMapperToJSON,
     FormInstanceFromJSON,
     FormInstanceToJSON,
-} from '../models/index';
+} from '../models';
 
 export interface FormFieldMapperFormBlueprintUuidFieldUuidDeleteRequest {
     formBlueprintUuid: string;

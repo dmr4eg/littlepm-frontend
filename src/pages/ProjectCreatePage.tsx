@@ -8,12 +8,12 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
-import { projectsApi } from '@/api-course/services/api-course'
+import { projectsApi } from '@/api/api-course/services/api-course'
 import type {
     ProjectBlueprint,
     ProjectDTO,
     ProjectInstance
-} from '@/api-course';  // generated models
+} from 'src/api/api-course';  // generated models
 
 const ProjectCreatePage: React.FC = () => {
     const router = useRouter();

@@ -1,7 +1,7 @@
 import React from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import ProjectCard from '@/components/ProjectCard';
-import type { ProjectDTO } from '@/api-course';
+import type { ProjectDTO } from 'src/api/api-course';
 
 interface ProjectCarouselProps {
     title: string;

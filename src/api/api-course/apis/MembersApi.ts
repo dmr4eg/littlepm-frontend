@@ -16,11 +16,11 @@
 import * as runtime from '../runtime';
 import type {
   Members,
-} from '../models/index';
+} from '../models';
 import {
     MembersFromJSON,
     MembersToJSON,
-} from '../models/index';
+} from '../models';
 
 export interface MembersGetRequest {
     limit: number;

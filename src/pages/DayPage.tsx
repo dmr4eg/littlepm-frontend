@@ -5,16 +5,16 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { daysApi } from '@/api-course/services/api-course';
-import { tasksApi, formsApi, mediaApi } from '@/api-content/services/api-content';
-import type { DayDTO, DayComponentsMapper } from '@/api-course';
-import type { TaskDTO, FormDTO, Media } from '@/api-content';
+import { daysApi } from '@/api/api-course/services/api-course';
+import { tasksApi, formsApi, mediaApi } from '@/api/api-content/services/api-content';
+import type { DayDTO, DayComponentsMapper } from 'src/api/api-course';
+import type { TaskDTO, FormDTO, Media } from 'src/api/api-content';
 import { DayContent } from '@/components/DayContent';
 import { DayChecklist } from '@/components/DayChecklist';
 import { DayCompletion } from '@/components/DayCompletion';
 import { useAuth } from '@/contexts/AuthContext';
 import keycloak from '@/configs/keycloak';
-import type { Finances } from '@/api-course/models/Finances';
+import type { Finances } from '@/api/api-course/models/Finances';
 import { computeFinances, validateFinances, FinancesPrimitives } from '@/lib/finances';
 
 interface TaskComponentProps {

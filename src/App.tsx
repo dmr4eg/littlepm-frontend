@@ -35,33 +35,14 @@ const App: React.FC = () => (
       <main className="flex-grow p-8 border-l border-r border-gray-200">
         <div className="container mx-auto py-10 rounded-3xl">
           <Routes>
-            {/* Home */}
             <Route path="/" element={<RootPage />} />
-
-            {/* Projects list & creation */}
             <Route path="/projects" element={<DashboardPage />} />
             <Route path="/projects/new" element={<CreateProjectPage />} />
-            <Route path="/projects/:blueprintuuid" element={<ProjectPage />} />
-
-            {/* Single project flow */}
-            <Route
-              path="/project/:projectblueprintuuid/day/:dayorder"
-              element={<DayPage />}
-            />
-            <Route
-              path="/project/:projectblueprintuuid/day/next/:dayorder"
-              element={<DayTransitPage />}
-            />
-            <Route
-              path="/project/:projectblueprintuuid/complete"
-              element={<ProjectCompletePage />}
-            />
-
+            <Route path="/project/:projectblueprintuuid/day/:dayorder" element={<DayPage />}/>
+            <Route path="/project/:projectblueprintuuid/day/next/:dayorder" element={<DayTransitPage />}/>
+            <Route path="/project/:projectblueprintuuid/complete" element={<ProjectCompletePage />}/>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/logout" element={<LogoutPage />} />
-
-            {/* User */}
-            {/*<Route path="/profile" element={<ProfilePage />} />*/}
 
             <Route path="/reg" element={<RegPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />

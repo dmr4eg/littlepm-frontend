@@ -16,11 +16,11 @@
 import * as runtime from '../runtime';
 import type {
   Media,
-} from '../models/index';
+} from '../models';
 import {
     MediaFromJSON,
     MediaToJSON,
-} from '../models/index';
+} from '../models';
 
 export interface MediaGetRequest {
     limit: number;

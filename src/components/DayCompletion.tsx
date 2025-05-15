@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { daysApi } from '@/api-course/services/api-course';
-import { projectsApi } from '@/api-course/services/api-course';
-import type { DayDTO } from '@/api-course';
-import type { ProjectDaysMapper } from '@/api-course';
+import { daysApi } from '@/api/api-course/services/api-course';
+import { projectsApi } from '@/api/api-course/services/api-course';
+import type { DayDTO } from 'src/api/api-course';
+import type { ProjectDaysMapper } from 'src/api/api-course';
 
 interface DayCompletionProps {
     dayId: string;

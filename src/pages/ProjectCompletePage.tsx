@@ -5,8 +5,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { projectsApi } from '@/api-course/services/api-course';
-import type { ProjectDTO } from '@/api-course';
+import { projectsApi } from '@/api/api-course/services/api-course';
+import type { ProjectDTO } from 'src/api/api-course';
 import { useAuth } from '@/contexts/AuthContext';
 import keycloak from '@/configs/keycloak';
 

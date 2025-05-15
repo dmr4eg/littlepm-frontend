@@ -7,8 +7,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { projectsApi } from '@/api-course/services/api-course';
-import type { ProjectDTO } from '@/api-course';
+import { projectsApi } from '@/api/api-course/services/api-course';
+import type { ProjectDTO } from 'src/api/api-course';
 import { Button } from '@/components/ui/button';
 import ProjectCarousel from '@/components/ProjectCarousel';
 
