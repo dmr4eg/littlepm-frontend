@@ -1,5 +1,5 @@
 import {
-    Configuration,           // replaces ApiClient
+    Configuration,
     DaysApi,
     FinancesApi,
     MembersApi,
@@ -9,16 +9,14 @@ import {
 import config from '../../../configs/api-course.json';
 
 const apiCfg = new Configuration({
-    basePath: config.api.API_BASE_URL,  
-    // accessToken: () => localStorage.getItem('jwt') ?? '',
-    // or to override fetch (node, SSR):
-    // fetchApi : fetchPolyfill,
+    basePath: config.api.API_BASE_URL,
+    accessToken: () => localStorage.getItem('jwt') ?? ''
 });
 
-export const daysApi  = new DaysApi(apiCfg);
-export const financesApi  = new FinancesApi(apiCfg);
-export const membersApi  = new MembersApi(apiCfg);
-export const projectsApi  = new ProjectsApi(apiCfg);
+export const daysApi = new DaysApi(apiCfg);
+export const financesApi = new FinancesApi(apiCfg);
+export const membersApi = new MembersApi(apiCfg);
+export const projectsApi = new ProjectsApi(apiCfg);
 
 
 export default {
@@ -29,10 +27,3 @@ export default {
 }
 
 
-// export const apiContent = {
-//   tasks : tasksApi,
-//   forms : formsApi,
-//   media : mediaApi,
-// };
-
-// export default apiContent;
