@@ -43,6 +43,12 @@ export interface DayBlueprint {
      * @memberof DayBlueprint
      */
     text?: string;
+    /**
+     * 
+     * @type {string[]}
+     * @memberof DayBlueprint
+     */
+    layout?: string[];
 }
 
 /**
@@ -63,11 +69,12 @@ export function DayBlueprintFromJSONTyped(json: any, ignoreDiscriminator: boolea
         return json;
     }
     return {
-        
+
         'dayBlueprintUuid': json['day_blueprint_uuid'],
         'title': json['title'],
         'description': json['description'] == null ? undefined : json['description'],
         'text': json['text'] == null ? undefined : json['text'],
+        'layout': json['layout'] == null ? undefined : json['layout'],
     };
 }
 
@@ -81,11 +88,12 @@ export function DayBlueprintToJSONTyped(value?: DayBlueprint | null, ignoreDiscr
     }
 
     return {
-        
+
         'day_blueprint_uuid': value['dayBlueprintUuid'],
         'title': value['title'],
         'description': value['description'],
         'text': value['text'],
+        'layout': value['layout'],
     };
 }
 
