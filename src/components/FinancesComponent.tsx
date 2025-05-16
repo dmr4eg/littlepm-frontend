@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { computeFinances, validateFinances, FinancesPrimitives } from '@/lib/finances';
 import type { Finances } from '@/api/api-course/models/Finances';
+import { FinancesReportGenerator } from './FinancesReportGenerator';
 
 interface FinancesComponentProps {
     dayId: string;
@@ -145,6 +146,11 @@ export const FinancesComponent: React.FC<FinancesComponentProps> = ({ dayId, ini
                 <div>Profit: <b>{finances.profit}</b></div>
                 <div>Toys Left: <b>{finances.toysLeft}</b></div>
             </div>
+
+            <FinancesReportGenerator
+                financesData={financesInput}
+                dayId={dayId}
+            />
         </div>
     );
 }; 

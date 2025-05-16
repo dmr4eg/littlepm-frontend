@@ -93,7 +93,12 @@ const DayPage: React.FC = () => {
     // Check if any form component matches a field in finances
     const hasFinancesForm = forms.some((form: FormDTO) => {
         const formTitle = form.blueprint.title.toLowerCase();
-        return formTitle.includes('spent budget') || formTitle.includes('expense amount') || formTitle.includes('investor gave') || formTitle.includes('toys planned') || formTitle.includes('toys sold');
+        return formTitle.includes('spent budget') ||
+            formTitle.includes('expense amount') ||
+            formTitle.includes('investor gave') ||
+            formTitle.includes('toys planned') ||
+            formTitle.includes('toys sold') ||
+            formTitle.includes('sold price');
     });
 
     return (
@@ -144,7 +149,9 @@ const DayPage: React.FC = () => {
             </div>
 
             {hasFinancesForm && (
-                <FinancesComponent dayId={dayBlueprintUuid as string} />
+                <FinancesComponent
+                    dayId={typeof dayBlueprintUuid === 'string' ? dayBlueprintUuid : ''}
+                />
             )}
         </div>
     );
